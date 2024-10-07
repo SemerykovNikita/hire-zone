@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { createUser } from "@/actions/userActions";
 import { IUserCreate } from "@/types/user";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function EmployerRegisterPage() {
   const [formData, setFormData] = useState<IUserCreate>({
@@ -10,12 +12,13 @@ export default function EmployerRegisterPage() {
     lastName: "",
     email: "",
     password: "",
-    role: "employer", // Роль для employer
+    role: "employer",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,19 +28,22 @@ export default function EmployerRegisterPage() {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-    setSuccess(false);
 
     try {
       const result = await createUser(formData);
       if (result.success) {
-        setSuccess(true);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          role: "employer", // Зберігаємо роль
+        const signInResult = await signIn("credentials", {
+          redirect: false,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
         });
+
+        if (signInResult?.error) {
+          setError("Failed to sign in automatically.");
+        } else {
+          router.push("/employer/create-company");
+        }
       } else {
         setError(result.error || "Failed to create user.");
       }
