@@ -1,5 +1,6 @@
 "use server";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { dbConnect } from "@/config/db";
 import CompanyModel, { ICompany } from "@/models/Company";
 import {
@@ -9,6 +10,8 @@ import {
   IUpdateCompany,
   IUpdateCompanyResponse,
 } from "@/types/company";
+import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 
 export async function createCompany(
   data: ICompanyCreate
@@ -28,6 +31,51 @@ export async function createCompany(
         website: savedCompany.website,
         owner: savedCompany.owner.toString(),
       },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+export async function getUserCompany(): Promise<IGetCompanyResponse> {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return {
+        success: false,
+        error: "User is not authenticated.",
+      };
+    }
+
+    await dbConnect();
+
+    // Используем .lean() для получения простого объекта
+    const company = await CompanyModel.findOne({
+      owner: session.user.id,
+    }).lean<ICompany>();
+
+    if (!company) {
+      return {
+        success: false,
+        error: "Company not found for this user.",
+      };
+    }
+
+    const extendedCompany = {
+      ...company,
+      _id: (company._id as mongoose.Types.ObjectId).toString(),
+      owner: (company.owner as unknown as mongoose.Types.ObjectId).toString(),
+      createdAt: company.createdAt.toISOString(),
+    };
+
+    return {
+      success: true,
+      data: extendedCompany,
     };
   } catch (error) {
     return {
