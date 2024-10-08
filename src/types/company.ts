@@ -1,3 +1,4 @@
+import { ICompany } from "@/models/Company";
 import mongoose from "mongoose";
 
 export interface ICompanyCreate {
@@ -16,5 +17,23 @@ export interface ICreateCompanyResponse {
     website?: string;
     owner: string;
   };
+  error?: string;
+}
+
+export interface IUpdateCompany {
+  name?: string;
+  description?: string;
+  website?: string;
+}
+
+export interface IUpdateCompanyResponse {
+  success: boolean;
+  data?: ICompany;
+  error?: string;
+}
+
+export interface IGetCompanyResponse {
+  success: boolean;
+  data?: ICompany;
   error?: string;
 }

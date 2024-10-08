@@ -2,7 +2,13 @@
 
 import { dbConnect } from "@/config/db";
 import CompanyModel, { ICompany } from "@/models/Company";
-import { ICompanyCreate, ICreateCompanyResponse } from "@/types/company";
+import {
+  ICompanyCreate,
+  ICreateCompanyResponse,
+  IGetCompanyResponse,
+  IUpdateCompany,
+  IUpdateCompanyResponse,
+} from "@/types/company";
 
 export async function createCompany(
   data: ICompanyCreate
@@ -32,17 +38,61 @@ export async function createCompany(
   }
 }
 
-export async function getCompanyById(companyId: string) {
-  await dbConnect();
-  return await CompanyModel.findById(companyId);
+export async function getCompanyById(
+  companyId: string
+): Promise<IGetCompanyResponse> {
+  try {
+    await dbConnect();
+    const company = await CompanyModel.findById(companyId);
+
+    if (!company) {
+      return {
+        success: false,
+        error: "Company not found.",
+      };
+    }
+
+    return {
+      success: true,
+      data: company,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
 }
 
 export async function updateCompany(
   companyId: string,
-  data: Partial<ICompany>
-) {
-  await dbConnect();
-  return await CompanyModel.findByIdAndUpdate(companyId, data, { new: true });
+  data: IUpdateCompany
+): Promise<IUpdateCompanyResponse> {
+  try {
+    await dbConnect();
+    const updatedCompany = await CompanyModel.findByIdAndUpdate(
+      companyId,
+      data,
+      { new: true }
+    );
+    if (!updatedCompany) {
+      return {
+        success: false,
+        error: "Company not found.",
+      };
+    }
+    return {
+      success: true,
+      data: updatedCompany,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
 }
 
 export async function deleteCompany(companyId: string) {
