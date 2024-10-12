@@ -1,6 +1,7 @@
 "use server";
 
 import { dbConnect } from "@/config/db";
+import CompanyModel from "@/models/Company";
 import JobVacancyModel, { IJobVacancy } from "@/models/JobVacancy";
 import {
   IJobVacancyCreate,
@@ -8,6 +9,7 @@ import {
   IGetJobVacancyResponse,
   IUpdateJobVacancyResponse,
   IDeleteJobVacancyResponse,
+  IGetJobVacancyFullResponse,
 } from "@/types/job";
 import mongoose from "mongoose";
 
@@ -40,21 +42,37 @@ export async function createJobVacancy(
 
 export async function getJobVacancyById(
   vacancyId: string
-): Promise<IGetJobVacancyResponse> {
+): Promise<IGetJobVacancyFullResponse> {
   try {
     await dbConnect();
-    const jobVacancy = await JobVacancyModel.findById(vacancyId);
 
-    if (!jobVacancy) {
+    const jobVacancy = await JobVacancyModel.findById(vacancyId)
+      .populate("company")
+      .exec();
+
+    if (!jobVacancy || !jobVacancy.company) {
       return {
         success: false,
-        error: "Job vacancy not found.",
+        error: "Job vacancy or company not found.",
       };
     }
 
+    const plainJobVacancy = {
+      ...jobVacancy.toObject(),
+      _id: jobVacancy._id.toString(),
+      company: {
+        ...jobVacancy.company.toObject(),
+        _id: jobVacancy.company._id.toString(),
+        owner: jobVacancy.company.owner.toString(),
+        createdAt: jobVacancy.company.createdAt.toISOString(),
+      },
+      postedBy: jobVacancy.postedBy.toString(),
+      createdAt: jobVacancy.createdAt.toISOString(),
+    };
+
     return {
       success: true,
-      data: jobVacancy,
+      data: plainJobVacancy,
     };
   } catch (error) {
     return {
@@ -158,6 +176,73 @@ export async function deleteJobVacancy(
     return {
       success: true,
       message: "Job vacancy deleted successfully.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+export async function getJobVacanciesBySearch(
+  title: string | null,
+  city: string | null
+): Promise<IGetJobVacancyResponse> {
+  try {
+    await dbConnect();
+
+    const query: any = {};
+
+    if (city) {
+      query.city = city;
+    }
+
+    if (title) {
+      const companies = await CompanyModel.find({
+        name: { $regex: title, $options: "i" },
+      }).lean();
+
+      const companyIds = companies.map((company) => company._id.toString());
+
+      query.$or = [
+        { title: { $regex: title, $options: "i" } },
+        { description: { $regex: title, $options: "i" } },
+        { company: { $in: companyIds } },
+        { requirements: { $regex: title, $options: "i" } },
+      ];
+    }
+
+    const jobVacancies = await JobVacancyModel.find(query)
+      .populate("company")
+      .lean();
+
+    if (!jobVacancies || jobVacancies.length === 0) {
+      return {
+        success: false,
+        error: "No job vacancies found.",
+      };
+    }
+
+    const plainJobVacancies = jobVacancies.map((vacancy) => ({
+      ...vacancy,
+      _id: (vacancy._id as mongoose.Types.ObjectId).toString(),
+      company: {
+        ...vacancy.company,
+        _id: (vacancy.company._id as mongoose.Types.ObjectId).toString(),
+      },
+      postedBy: (vacancy.postedBy as mongoose.Types.ObjectId).toString(),
+      createdAt: vacancy.createdAt.toISOString(),
+      title: vacancy.title,
+      description: vacancy.description,
+      requirements: vacancy.requirements,
+      salaryRange: vacancy.salaryRange,
+    }));
+
+    return {
+      success: true,
+      data: plainJobVacancies,
     };
   } catch (error) {
     return {
