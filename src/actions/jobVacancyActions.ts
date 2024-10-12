@@ -1,7 +1,7 @@
 "use server";
 
 import { dbConnect } from "@/config/db";
-import JobVacancyModel from "@/models/JobVacancy";
+import JobVacancyModel, { IJobVacancy } from "@/models/JobVacancy";
 import {
   IJobVacancyCreate,
   ICreateJobResponse,
@@ -9,6 +9,7 @@ import {
   IUpdateJobVacancyResponse,
   IDeleteJobVacancyResponse,
 } from "@/types/job";
+import mongoose from "mongoose";
 
 export async function createJobVacancy(
   data: IJobVacancyCreate
@@ -86,6 +87,48 @@ export async function updateJobVacancy(
     return {
       success: true,
       data: updatedJobVacancy,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
+export async function getJobVacanciesByCompanyId(
+  companyId: string
+): Promise<IGetJobVacancyResponse> {
+  try {
+    await dbConnect();
+
+    const jobVacancies = await JobVacancyModel.find({
+      company: companyId,
+    }).lean<IJobVacancy[]>();
+
+    if (!jobVacancies || jobVacancies.length === 0) {
+      return {
+        success: false,
+        error: "No job vacancies found for this company.",
+      };
+    }
+
+    const plainJobVacancies = jobVacancies.map((vacancy) => ({
+      ...vacancy,
+      _id: (vacancy._id as mongoose.Types.ObjectId).toString(),
+      company: (
+        vacancy.company as unknown as mongoose.Types.ObjectId
+      ).toString(),
+      postedBy: (
+        vacancy.postedBy as unknown as mongoose.Types.ObjectId
+      ).toString(),
+      createdAt: vacancy.createdAt.toISOString(),
+    }));
+
+    return {
+      success: true,
+      data: plainJobVacancies,
     };
   } catch (error) {
     return {

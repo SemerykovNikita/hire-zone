@@ -54,7 +54,6 @@ export async function getUserCompany(): Promise<IGetCompanyResponse> {
 
     await dbConnect();
 
-    // Используем .lean() для получения простого объекта
     const company = await CompanyModel.findOne({
       owner: session.user.id,
     }).lean<ICompany>();
