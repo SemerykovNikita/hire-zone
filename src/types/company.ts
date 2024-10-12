@@ -8,6 +8,11 @@ export interface ICompanyCreate {
   owner: mongoose.Types.ObjectId;
 }
 
+export interface ICompanyExtended extends Omit<ICompany, "_id"> {
+  _id: string;
+}
+
+
 export interface ICreateCompanyResponse {
   success: boolean;
   data?: {

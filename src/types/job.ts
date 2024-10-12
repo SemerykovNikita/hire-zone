@@ -5,6 +5,7 @@ export interface IJobVacancyCreate {
   description: string;
   requirements: string[];
   salaryRange: { min: number; max: number };
+  city: string;
   company: mongoose.Types.ObjectId | string;
   postedBy: mongoose.Types.ObjectId | string;
   isActive?: boolean;
@@ -22,18 +23,28 @@ export interface ICreateJobResponse {
 
 export interface IGetJobVacancyResponse {
   success: boolean;
-  data?: IJobVacancy;
+  data?: IJobVacancyExtended;
   error?: string;
 }
 
 export interface IUpdateJobVacancyResponse {
   success: boolean;
-  data?: IJobVacancy;
+  data?: IJobVacancyExtended;
   error?: string;
 }
 
 export interface IDeleteJobVacancyResponse {
   success: boolean;
   message?: string;
+  error?: string;
+}
+
+export interface IJobVacancyExtended extends Omit<IJobVacancy, "_id"> {
+  _id: string;
+}
+
+export interface IGetJobVacancyFullResponse {
+  success: boolean;
+  data?: IJobVacancyExtended;
   error?: string;
 }
