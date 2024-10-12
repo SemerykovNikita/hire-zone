@@ -14,6 +14,7 @@ export default function CreateJobPage() {
     description: "",
     requirements: [""],
     salaryRange: { min: 0, max: 0 },
+    city: "",
     company: "",
     postedBy: "",
   });
@@ -81,18 +82,11 @@ export default function CreateJobPage() {
     e: React.ChangeEvent<HTMLInputElement>,
     type: "min" | "max"
   ) => {
-    // Логируем текущее состояние перед обновлением
-    console.log("Updating salary range:", formData.salaryRange);
-
     setFormData((prevData) => {
       const newSalaryRange = {
         ...prevData.salaryRange,
-        [type]: e.target.value ? +e.target.value : 0, // Присваиваем значение или 0
+        [type]: e.target.value ? +e.target.value : 0,
       };
-
-      // Логируем новое состояние для отладки
-      console.log("New salary range:", newSalaryRange);
-
       return {
         ...prevData,
         salaryRange: newSalaryRange,
@@ -151,6 +145,14 @@ export default function CreateJobPage() {
           placeholder="Job Description"
           value={formData.description}
           onChange={handleTextAreaChange}
+          required
+        />
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          value={formData.city}
+          onChange={handleChange}
           required
         />
         <div>

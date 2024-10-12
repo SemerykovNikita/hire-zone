@@ -6,6 +6,7 @@ export interface IJobVacancy extends Document {
   requirements: string[];
   salaryRange?: { min: number; max: number };
   company: mongoose.Schema.Types.ObjectId;
+  city: string;
   postedBy: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
   isActive: boolean;
@@ -19,6 +20,7 @@ const jobVacancySchema = new mongoose.Schema<IJobVacancy>({
     min: { type: Number },
     max: { type: Number },
   },
+  city: { type: String, required: true },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",
