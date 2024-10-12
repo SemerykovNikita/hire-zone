@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { IJobVacancyFull } from "@/types/job";
+import { useRouter } from "next/navigation";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";
 
 export default function JobVacancyDetailPage({
@@ -10,9 +9,10 @@ export default function JobVacancyDetailPage({
 }: {
   params: { id: string };
 }) {
-  const [jobVacancy, setJobVacancy] = useState<IJobVacancyFull | null>(null);
+  const [jobVacancy, setJobVacancy] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const vacancyId = params.id;
 
@@ -35,6 +35,10 @@ export default function JobVacancyDetailPage({
 
     fetchJobVacancy();
   }, [vacancyId]);
+
+  const handleApplyClick = () => {
+    router.push(`/jobseeker/apply/${vacancyId}`);
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -78,6 +82,8 @@ export default function JobVacancyDetailPage({
       <p>
         <strong>Description:</strong> {jobVacancy.company.description || "N/A"}
       </p>
+
+      <button onClick={handleApplyClick}>Submit Application</button>
     </div>
   );
 }
