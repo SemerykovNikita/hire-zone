@@ -78,3 +78,49 @@ export async function deleteApplication(applicationId: string) {
 
   return await ApplicationModel.findByIdAndDelete(applicationId);
 }
+
+export async function getApplicationsByJobVacancyId(vacancyId: string) {
+  try {
+    await dbConnect();
+
+    const applications = await ApplicationModel.find({
+      jobVacancy: vacancyId,
+    })
+      .populate("applicant", "firstName lastName email")
+      .populate("jobVacancy", "title")
+      .lean();
+
+    console.log(applications);
+    if (!applications || applications.length === 0) {
+      return {
+        success: false,
+        error: "No applications found for this job vacancy.",
+      };
+    }
+
+    const plainApplications = applications.map((application) => ({
+      ...application,
+      _id: application._id.toString(),
+      applicant: {
+        ...application.applicant,
+        _id: application.applicant._id.toString(),
+      },
+      jobVacancy: {
+        ...application.jobVacancy,
+        _id: application.jobVacancy._id.toString(),
+      },
+      appliedAt: application.appliedAt.toISOString(),
+    }));
+
+    return {
+      success: true,
+      data: plainApplications,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
