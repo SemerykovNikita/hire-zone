@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";
+import { addFavorite, removeFavorite } from "@/actions/favoriteActions";
+import { useSession } from "next-auth/react";
 
 export default function JobVacancyDetailPage({
   params,
@@ -12,6 +14,8 @@ export default function JobVacancyDetailPage({
   const [jobVacancy, setJobVacancy] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { data: session } = useSession();
   const router = useRouter();
 
   const vacancyId = params.id;
@@ -20,7 +24,6 @@ export default function JobVacancyDetailPage({
     const fetchJobVacancy = async () => {
       try {
         const result = await getJobVacancyById(vacancyId);
-
         if (result.success && result.data) {
           setJobVacancy(result.data);
         } else {
@@ -38,6 +41,31 @@ export default function JobVacancyDetailPage({
 
   const handleApplyClick = () => {
     router.push(`/jobseeker/apply/${vacancyId}`);
+  };
+
+  const handleFavoriteToggle = async () => {
+    if (!session?.user) {
+      alert("Please log in to manage favorites.");
+      return;
+    }
+    const userId = session.user.id;
+
+    console.log(userId);
+    if (isFavorite) {
+      const result = await removeFavorite(userId, vacancyId);
+      if (result.success) {
+        setIsFavorite(false);
+      } else {
+        alert(result.error || "Failed to remove from favorites.");
+      }
+    } else {
+      const result = await addFavorite(userId, vacancyId);
+      if (result.success) {
+        setIsFavorite(true);
+      } else {
+        alert(result.error || "Failed to add to favorites.");
+      }
+    }
   };
 
   if (loading) {
@@ -84,6 +112,9 @@ export default function JobVacancyDetailPage({
       </p>
 
       <button onClick={handleApplyClick}>Submit Application</button>
+      <button onClick={handleFavoriteToggle}>
+        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+      </button>
     </div>
   );
 }
