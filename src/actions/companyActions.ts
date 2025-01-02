@@ -3,6 +3,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { dbConnect } from "@/config/db";
 import CompanyModel, { ICompany } from "@/models/Company";
+import JobVacancyModel from "@/models/JobVacancy";
 import {
   ICompanyCreate,
   ICreateCompanyResponse,
@@ -143,6 +144,40 @@ export async function updateCompany(
 }
 
 export async function deleteCompany(companyId: string) {
-  await dbConnect();
-  return await CompanyModel.findByIdAndDelete(companyId);
+  try {
+    await dbConnect();
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return { success: false, error: "User not authenticated" };
+    }
+
+    const company = await CompanyModel.findById(companyId);
+
+    if (!company) {
+      return { success: false, error: "Company not found." };
+    }
+
+    if (company.owner.toString() !== session.user.id) {
+      return {
+        success: false,
+        error: "You are not authorized to delete this company.",
+      };
+    }
+
+    await JobVacancyModel.deleteMany({ company: company._id });
+
+    await CompanyModel.findByIdAndDelete(company._id);
+
+    return {
+      success: true,
+      message: "Company and its job vacancies deleted successfully.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { dbConnect } from "@/config/db";
 import CompanyModel from "@/models/Company";
 import JobVacancyModel, { IJobVacancy } from "@/models/JobVacancy";
@@ -12,6 +13,7 @@ import {
   IGetJobVacancyFullResponse,
 } from "@/types/job";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 
 export async function createJobVacancy(
   data: IJobVacancyCreate
@@ -83,12 +85,82 @@ export async function getJobVacancyById(
   }
 }
 
+export async function toggleJobVacancyStatus(vacancyId: string) {
+  try {
+    await dbConnect();
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return { success: false, error: "User not authenticated" };
+    }
+
+    const jobVacancy = await JobVacancyModel.findById(vacancyId);
+
+    if (!jobVacancy) {
+      return { success: false, error: "Job vacancy not found." };
+    }
+
+    if (jobVacancy.postedBy.toString() !== session.user.id) {
+      return {
+        success: false,
+        error: "You are not authorized to modify this job vacancy.",
+      };
+    }
+
+    jobVacancy.isActive = !jobVacancy.isActive;
+    const updatedJobVacancy = await jobVacancy.save();
+
+    const plainJobVacancy = updatedJobVacancy.toObject();
+    plainJobVacancy._id = plainJobVacancy._id.toString();
+    plainJobVacancy.company = plainJobVacancy.company.toString();
+    plainJobVacancy.postedBy = plainJobVacancy.postedBy.toString();
+    plainJobVacancy.createdAt = plainJobVacancy.createdAt.toISOString();
+
+    return { success: true, data: plainJobVacancy };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
+
 export async function updateJobVacancy(
   vacancyId: string,
   data: Partial<IJobVacancyCreate>
 ): Promise<IUpdateJobVacancyResponse> {
   try {
     await dbConnect();
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      throw new Error("User not authenticated");
+    }
+
+    const userId = session.user.id;
+
+    const jobVacancy = await JobVacancyModel.findById(vacancyId)
+      .populate("company")
+      .lean();
+
+    if (!jobVacancy) {
+      return {
+        success: false,
+        error: "Job vacancy not found.",
+      };
+    }
+
+    if (
+      jobVacancy.postedBy.toString() !== userId &&
+      jobVacancy.company.owner.toString() !== userId
+    ) {
+      return {
+        success: false,
+        error: "You do not have permission to update this job vacancy.",
+      };
+    }
+
     const updatedJobVacancy = await JobVacancyModel.findByIdAndUpdate(
       vacancyId,
       data,
@@ -98,13 +170,21 @@ export async function updateJobVacancy(
     if (!updatedJobVacancy) {
       return {
         success: false,
-        error: "Job vacancy not found.",
+        error: "Failed to update job vacancy.",
       };
     }
 
+    const plainUpdatedVacancy = {
+      ...updatedJobVacancy.toObject(),
+      _id: updatedJobVacancy._id.toString(),
+      company: updatedJobVacancy.company.toString(),
+      postedBy: updatedJobVacancy.postedBy.toString(),
+      createdAt: updatedJobVacancy.createdAt.toISOString(),
+    };
+
     return {
       success: true,
-      data: updatedJobVacancy,
+      data: plainUpdatedVacancy,
     };
   } catch (error) {
     return {
@@ -157,26 +237,31 @@ export async function getJobVacanciesByCompanyId(
   }
 }
 
-export async function deleteJobVacancy(
-  vacancyId: string
-): Promise<IDeleteJobVacancyResponse> {
+export async function deleteJobVacancy(vacancyId: string) {
   try {
     await dbConnect();
-    const deletedJobVacancy = await JobVacancyModel.findByIdAndDelete(
-      vacancyId
-    );
+    const session = await getServerSession(authOptions);
 
-    if (!deletedJobVacancy) {
+    if (!session || !session.user) {
+      return { success: false, error: "User not authenticated" };
+    }
+
+    const jobVacancy = await JobVacancyModel.findById(vacancyId);
+
+    if (!jobVacancy) {
+      return { success: false, error: "Job vacancy not found." };
+    }
+
+    if (jobVacancy.postedBy.toString() !== session.user.id) {
       return {
         success: false,
-        error: "Job vacancy not found.",
+        error: "You are not authorized to delete this job vacancy.",
       };
     }
 
-    return {
-      success: true,
-      message: "Job vacancy deleted successfully.",
-    };
+    await jobVacancy.deleteOne();
+
+    return { success: true, message: "Job vacancy deleted successfully." };
   } catch (error) {
     return {
       success: false,
