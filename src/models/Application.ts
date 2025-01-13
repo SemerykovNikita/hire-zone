@@ -5,6 +5,7 @@ export interface IApplication extends Document {
   jobVacancy: mongoose.Schema.Types.ObjectId;
   coverLetter?: string;
   resumeUrl: string;
+  phoneNumber: string;
   status: "pending" | "accepted" | "rejected";
   appliedAt: Date;
 }
@@ -22,6 +23,7 @@ const applicationSchema = new mongoose.Schema<IApplication>({
   },
   coverLetter: { type: String },
   resumeUrl: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
   status: {
     type: String,
     enum: ["pending", "accepted", "rejected"],
