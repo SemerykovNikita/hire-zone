@@ -10,6 +10,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
   const [jobVacancy, setJobVacancy] = useState<any | null>(null);
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -44,6 +45,11 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
       return;
     }
 
+    if (!phoneNumber.trim()) {
+      setError("Phone number is required.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const applicationData = {
@@ -51,6 +57,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
         jobVacancy: vacancyId,
         coverLetter,
         resumeUrl,
+        phoneNumber,
       };
       const result = await createApplication(applicationData);
 
@@ -90,6 +97,17 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
 
       <form onSubmit={handleSubmit}>
         <div>
+          <label htmlFor="phoneNumber">Phone Number</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="Enter your phone number"
+            required
+          />
+        </div>
+        <div>
           <label htmlFor="coverLetter">Cover Letter</label>
           <textarea
             id="coverLetter"
@@ -100,7 +118,6 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
         </div>
         <div>
           <label htmlFor="resumeUrl">Resume URL</label>
-          {/* TODO upload files */}
           <input
             type="url"
             id="resumeUrl"
