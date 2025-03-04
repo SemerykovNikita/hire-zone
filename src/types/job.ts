@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ICompanyExtended } from "./company";
 
 export interface IJobVacancyCreate {
   title: string;
@@ -6,13 +7,23 @@ export interface IJobVacancyCreate {
   requirements: string[];
   salaryRange: { min: number; max: number };
   city: string;
-  company: mongoose.Types.ObjectId | string;
+  company: mongoose.Types.ObjectId | string | ICompanyExtended;
   postedBy: mongoose.Types.ObjectId | string;
   isActive?: boolean;
 }
 
 export interface IJobVacancy extends IJobVacancyCreate {
   createdAt: Date;
+}
+
+export interface IJobVacancyExtended extends Omit<IJobVacancy, "_id"> {
+  _id: string;
+}
+
+export interface IPagination {
+  total: number;
+  page: number;
+  limit: number;
 }
 
 export interface ICreateJobResponse {
@@ -23,7 +34,8 @@ export interface ICreateJobResponse {
 
 export interface IGetJobVacancyResponse {
   success: boolean;
-  data?: IJobVacancyExtended;
+  data?: IJobVacancyExtended[];
+  pagination?: IPagination;
   error?: string;
 }
 
@@ -37,10 +49,6 @@ export interface IDeleteJobVacancyResponse {
   success: boolean;
   message?: string;
   error?: string;
-}
-
-export interface IJobVacancyExtended extends Omit<IJobVacancy, "_id"> {
-  _id: string;
 }
 
 export interface IGetJobVacancyFullResponse {
