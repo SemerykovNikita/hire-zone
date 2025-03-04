@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
-export default function SearchPage() {
+export default async function SearchPage() {
   const [title, setTitle] = useState("");
   const [city, setCity] = useState("");
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function SearchPage() {
           <option value="Zhytomyr">Zhytomyr</option>
         </select>
         <button type="submit">Find Jobs</button>
+        <button onClick={() => signOut()}>signOut</button>
       </form>
     </div>
   );

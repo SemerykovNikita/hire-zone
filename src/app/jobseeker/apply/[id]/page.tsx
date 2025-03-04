@@ -2,19 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { createApplication } from "@/actions/applicationActions";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";
+import { saveResumeUrl, getUserResumes } from "@/actions/userActions";
+import { put } from "@vercel/blob";
 
 export default function ApplyJobPage({ params }: { params: { id: string } }) {
   const [jobVacancy, setJobVacancy] = useState<any | null>(null);
   const [coverLetter, setCoverLetter] = useState("");
-  const [resumeUrl, setResumeUrl] = useState("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [selectedResume, setSelectedResume] = useState<string>("");
+  const [userResumes, setUserResumes] = useState<
+    { url: string; uploadedAt: string }[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const { data: session } = useSession();
   const vacancyId = params.id;
 
   useEffect(() => {
@@ -34,24 +38,63 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
       }
     };
 
+    const fetchUserResumes = async () => {
+      const result = await getUserResumes();
+      if (result.success) {
+        setUserResumes(result.data);
+      }
+    };
+
     fetchJobVacancy();
+    fetchUserResumes();
   }, [vacancyId]);
+
+  console.log(userResumes);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setResumeFile(e.target.files[0]);
+      setSelectedResume("");
+    }
+  };
+
+  const handleResumeSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedResume(e.target.value);
+    setResumeFile(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session || !session.user) {
-      setError("You must be logged in to submit an application.");
-      return;
-    }
 
     setSubmitting(true);
+    setError(null);
+
     try {
+      let uploadedResumeUrl = selectedResume;
+
+      if (resumeFile) {
+        const blob = await put(resumeFile.name, resumeFile, {
+          contentType: resumeFile.type,
+          access: "public",
+          token:
+            "vercel_blob_rw_1eKZn9vXTKWumt66_1DX2MbYr9eCuOfeMkSH7aP9lsZMZ0A",
+        });
+
+        uploadedResumeUrl = blob.url;
+
+        const saveResumeResult = await saveResumeUrl(uploadedResumeUrl);
+        if (!saveResumeResult.success) {
+          throw new Error(saveResumeResult.error || "Failed to save resume.");
+        }
+      }
+
       const applicationData = {
-        applicant: session.user.id,
+        applicant: "userId-from-session",
         jobVacancy: vacancyId,
         coverLetter,
-        resumeUrl,
+        resumeUrl: uploadedResumeUrl,
       };
+
       const result = await createApplication(applicationData);
 
       if (result.success) {
@@ -59,8 +102,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
       } else {
         setError(result.error || "Failed to submit the application.");
       }
-    } catch (err) {
-      setError("An error occurred while submitting the application.");
+    } catch (err: any) {
+      setError(
+        err.message || "An error occurred while submitting the application."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -99,15 +144,27 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
           />
         </div>
         <div>
-          <label htmlFor="resumeUrl">Resume URL</label>
-          {/* TODO upload files */}
+          <label htmlFor="resumeSelection">Select Existing Resume</label>
+          <select
+            id="resumeSelection"
+            onChange={handleResumeSelection}
+            value={selectedResume}
+          >
+            <option value="">Upload new resume</option>
+            {userResumes.map((resume) => (
+              <option key={resume.url} value={resume.url}>
+                {new Date(resume.uploadedAt).toLocaleDateString()}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="resumeFile">Upload New Resume</label>
           <input
-            type="url"
-            id="resumeUrl"
-            value={resumeUrl}
-            onChange={(e) => setResumeUrl(e.target.value)}
-            placeholder="https://example.com/your-resume.pdf"
-            required
+            type="file"
+            id="resumeFile"
+            accept=".pdf,.doc,.docx"
+            onChange={handleFileChange}
           />
         </div>
         <button type="submit" disabled={submitting}>
