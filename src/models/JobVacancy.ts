@@ -8,6 +8,7 @@ export interface IJobVacancy extends Document {
   company: mongoose.Schema.Types.ObjectId;
   city: string;
   postedBy: mongoose.Schema.Types.ObjectId;
+  categories?: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;
   isActive: boolean;
 }
@@ -31,6 +32,12 @@ const jobVacancySchema = new mongoose.Schema<IJobVacancy>({
     ref: "User",
     required: true,
   },
+  categories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
 });
