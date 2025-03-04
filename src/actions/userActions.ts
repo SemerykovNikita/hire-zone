@@ -208,12 +208,82 @@ export async function getUserDetails() {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
+        resumes: user.resumes
       },
     };
   } catch (error) {
     return {
       success: false,
       error: error.message || "Unknown error occurred",
+    };
+  }
+}
+
+export async function saveResumeUrl(resumeUrl: string) {
+  try {
+    await dbConnect();
+
+    console.log(resumeUrl);
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      throw new Error("User not authenticated");
+    }
+
+    const userId = session.user.id;
+
+    console.log(userId);
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!user.resumes) {
+      user.resumes = [];
+    }
+
+    user.resumes.push({ url: resumeUrl, uploadedAt: new Date() });
+
+    await user.save();
+
+    return {
+      success: true,
+      message: "Resume URL saved successfully.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || "Failed to save resume URL",
+    };
+  }
+}
+
+export async function getUserResumes() {
+  try {
+    await dbConnect();
+
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      throw new Error("User not authenticated");
+    }
+
+    const userId = session.user.id;
+    const user = await UserModel.findById(userId).select("resumes").lean();
+    if (!user || !user.resumes) {
+      return {
+        success: true,
+        data: [],
+      };
+    }
+
+    return {
+      success: true,
+      data: user.resumes,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || "Failed to retrieve resumes",
     };
   }
 }
