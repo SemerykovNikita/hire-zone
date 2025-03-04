@@ -90,7 +90,6 @@ export async function getApplicationsByJobVacancyId(vacancyId: string) {
       .populate("jobVacancy", "title")
       .lean();
 
-    console.log(applications);
     if (!applications || applications.length === 0) {
       return {
         success: false,
