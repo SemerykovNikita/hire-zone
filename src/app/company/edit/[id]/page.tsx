@@ -10,6 +10,14 @@ import {
   IUpdateCompanyResponse,
 } from "@/types/company";
 import { ICompany } from "@/models/Company";
+import {
+  Building2,
+  FileText,
+  Globe,
+  Loader2,
+  AlertCircle,
+  Save,
+} from "lucide-react";
 
 export default function EditCompanyPage({
   params,
@@ -30,7 +38,6 @@ export default function EditCompanyPage({
         const response: IGetCompanyResponse = await getCompanyById(companyId);
         if (response.success && response.data) {
           const company = response.data;
-          // Перевірка, чи користувач є власником компанії
           if (company.owner.toString() === session?.user.id) {
             setFormData(company);
             setIsOwner(true);
@@ -50,7 +57,9 @@ export default function EditCompanyPage({
     }
   }, [companyId, session]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (formData) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -87,50 +96,138 @@ export default function EditCompanyPage({
   };
 
   if (!session) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin">
+          <Loader2 className="h-8 w-8 text-gray-500" />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="p-6 bg-red-50 border border-red-200 rounded-lg max-w-lg w-full">
+          <div className="flex items-center gap-2 text-red-600">
+            <AlertCircle className="h-5 w-5" />
+            <p className="font-medium">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!isOwner) {
-    return <p>You do not have permission to edit this company.</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg max-w-lg w-full">
+          <div className="flex items-center gap-2 text-yellow-600">
+            <AlertCircle className="h-5 w-5" />
+            <p className="font-medium">
+              You do not have permission to edit this company.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Edit Company</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {formData && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Company Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={formData.description || ""}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="website"
-            placeholder="Website"
-            value={formData.website || ""}
-            onChange={handleChange}
-          />
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Updating..." : "Update Company"}
-          </button>
-        </form>
-      )}
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
+            <Building2 className="h-8 w-8" />
+            Edit Company
+          </h1>
+        </div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-2 text-red-600">
+              <AlertCircle className="h-5 w-5" />
+              <p className="font-medium">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {formData && (
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Company Name
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Company Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
+                  />
+                  <Building2 className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Description
+                </label>
+                <div className="relative">
+                  <textarea
+                    name="description"
+                    placeholder="Company Description"
+                    value={formData.description || ""}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
+                  />
+                  <FileText className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Website
+                </label>
+                <div className="relative">
+                  <input
+                    type="url"
+                    name="website"
+                    placeholder="https://example.com"
+                    value={formData.website || ""}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
+                  />
+                  <Globe className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    Update Company
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

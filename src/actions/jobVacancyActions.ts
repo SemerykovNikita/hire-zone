@@ -273,7 +273,9 @@ export async function deleteJobVacancy(vacancyId: string) {
 
 export async function getJobVacanciesBySearch(
   title: string | null,
-  city: string | null
+  city: string | null,
+  page: number = 1,
+  limit: number = 10
 ): Promise<IGetJobVacancyResponse> {
   try {
     await dbConnect();
@@ -299,8 +301,11 @@ export async function getJobVacanciesBySearch(
       ];
     }
 
+    const total = await JobVacancyModel.countDocuments(query);
     const jobVacancies = await JobVacancyModel.find(query)
       .populate("company")
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
 
     if (!jobVacancies || jobVacancies.length === 0) {
@@ -313,10 +318,7 @@ export async function getJobVacanciesBySearch(
     const plainJobVacancies = jobVacancies.map((vacancy) => ({
       ...vacancy,
       _id: (vacancy._id as mongoose.Types.ObjectId).toString(),
-      company: {
-        ...vacancy.company,
-        _id: (vacancy.company._id as mongoose.Types.ObjectId).toString(),
-      },
+      company: vacancy.company ? vacancy.company.name : null,
       postedBy: (vacancy.postedBy as mongoose.Types.ObjectId).toString(),
       createdAt: vacancy.createdAt.toISOString(),
       title: vacancy.title,
@@ -328,6 +330,11 @@ export async function getJobVacanciesBySearch(
     return {
       success: true,
       data: plainJobVacancies,
+      pagination: {
+        total,
+        page,
+        limit,
+      },
     };
   } catch (error) {
     return {
