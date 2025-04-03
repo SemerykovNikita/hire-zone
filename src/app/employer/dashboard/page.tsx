@@ -10,16 +10,31 @@ import {
   deleteJobVacancy,
 } from "@/actions/jobVacancyActions";
 import { IJobVacancy } from "@/types/job";
-import Modal from "react-modal";
+import {
+  Building2,
+  Briefcase,
+  AlertCircle,
+  Loader2,
+  Trash2,
+  Eye,
+  ToggleLeft,
+  ToggleRight,
+  Plus,
+  DollarSign,
+  Edit2,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function EmployerDashboard() {
   const [vacancies, setVacancies] = useState<IJobVacancy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [companyModalIsOpen, setCompanyModalIsOpen] = useState(false);
-  const [vacancyToDelete, setVacancyToDelete] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(
+    null
+  );
+  const [showCompanyDeleteConfirm, setShowCompanyDeleteConfirm] =
+    useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -69,22 +84,16 @@ export default function EmployerDashboard() {
             : vacancy
         )
       );
-    } else {
-      alert(result.error || "Failed to update job vacancy status.");
     }
   };
 
-  const handleDeleteVacancy = async () => {
-    if (!vacancyToDelete) return;
-
-    const result = await deleteJobVacancy(vacancyToDelete);
+  const handleDeleteVacancy = async (vacancyId: string) => {
+    const result = await deleteJobVacancy(vacancyId);
     if (result.success) {
       setVacancies((prevVacancies) =>
-        prevVacancies.filter((vacancy) => vacancy._id !== vacancyToDelete)
+        prevVacancies.filter((vacancy) => vacancy._id !== vacancyId)
       );
-      setModalIsOpen(false);
-    } else {
-      alert(result.error || "Failed to delete job vacancy.");
+      setShowDeleteConfirm(null);
     }
   };
 
@@ -94,112 +103,261 @@ export default function EmployerDashboard() {
     const result = await deleteCompany(companyId);
     if (result.success) {
       router.push("/employer/create-company");
-    } else {
-      alert(result.error || "Failed to delete company.");
     }
-    setCompanyModalIsOpen(false);
-  };
-
-  const openModal = (vacancyId: string) => {
-    setVacancyToDelete(vacancyId);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setVacancyToDelete(null);
-  };
-
-  const openCompanyModal = () => {
-    setCompanyModalIsOpen(true);
-  };
-
-  const closeCompanyModal = () => {
-    setCompanyModalIsOpen(false);
-  };
-
-  const handleViewReviews = (vacancyId: string) => {
-    router.push(`/employer/job-vacancies/${vacancyId}/reviews`);
+    setShowCompanyDeleteConfirm(false);
   };
 
   if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Your Job Vacancies</h1>
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Job Vacancies</h1>
+            <p className="mt-2 text-gray-600">
+              Manage your company's job listings
+            </p>
+          </div>
+          <div className="flex space-x-4">
+            <Link
+              href="/employer/post-job"
+              className="flex items-center px-4 py-2 border border-black text-black rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Create Vacancy
+            </Link>
+            <Link
+              href="/employer/update-company"
+              className="flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              <Edit2 className="h-4 w-4 mr-2" />
+              Update Company
+            </Link>
+            <button
+              onClick={() => setShowCompanyDeleteConfirm(true)}
+              className="flex items-center px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Company
+            </button>
+          </div>
+        </div>
 
-      {/* Button for deleting company */}
-      <button onClick={openCompanyModal} style={{ marginBottom: "20px" }}>
-        Delete Company
-      </button>
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-2">
+            <AlertCircle className="h-5 w-5 text-red-500" />
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
 
-      {vacancies.length > 0 ? (
-        <table
-          border={1}
-          cellPadding="10"
-          style={{ width: "100%", borderCollapse: "collapse" }}
-        >
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Salary Range</th>
-              <th>Requirements</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vacancies.map((vacancy) => (
-              <tr key={vacancy._id}>
-                <td>{vacancy.title}</td>
-                <td>{vacancy.description}</td>
-                <td>
-                  {vacancy.salaryRange?.min} - {vacancy.salaryRange?.max}
-                </td>
-                <td>{vacancy.requirements.join(", ")}</td>
-                <td>{vacancy.isActive ? "Active" : "Inactive"}</td>
-                <td>
-                  <button onClick={() => handleToggleStatus(vacancy._id)}>
-                    {vacancy.isActive ? "Deactivate" : "Activate"}
-                  </button>
-                  <button onClick={() => openModal(vacancy._id)}>Delete</button>
-                  <button onClick={() => handleViewReviews(vacancy._id)}>
-                    View Reviews
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>You have no job vacancies.</p>
-      )}
+        {vacancies.length > 0 ? (
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Job Details
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Requirements
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Salary
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {vacancies.map((vacancy) => (
+                    <tr key={vacancy._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div className="flex items-start space-x-3">
+                          <Briefcase className="h-5 w-5 text-gray-400 mt-1" />
+                          <div>
+                            <div className="font-medium text-gray-900">
+                              {vacancy.title}
+                            </div>
+                            <div className="text-sm text-gray-500 mt-1">
+                              {vacancy.description}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-2">
+                          {vacancy.requirements.map((req, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                            >
+                              {req}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center text-gray-900">
+                          <DollarSign className="h-4 w-4 text-gray-400 mr-1" />
+                          {vacancy.salaryRange?.min.toLocaleString()} -{" "}
+                          {vacancy.salaryRange?.max.toLocaleString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            vacancy.isActive
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {vacancy.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right space-x-3">
+                        <button
+                          onClick={() => handleToggleStatus(vacancy._id)}
+                          className="text-gray-400 hover:text-primary transition-colors"
+                          title={vacancy.isActive ? "Deactivate" : "Activate"}
+                        >
+                          {vacancy.isActive ? (
+                            <ToggleRight className="h-5 w-5" />
+                          ) : (
+                            <ToggleLeft className="h-5 w-5" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/employer/update-vacancy/${vacancy._id}`
+                            )
+                          }
+                          className="text-gray-400 hover:text-primary transition-colors"
+                          title="Update Vacancy"
+                        >
+                          <Edit2 className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/employer/job-vacancies/${vacancy._id}/reviews`
+                            )
+                          }
+                          className="text-gray-400 hover:text-primary transition-colors"
+                          title="View Reviews"
+                        >
+                          <Eye className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() => setShowDeleteConfirm(vacancy._id)}
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+            <Briefcase className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No job vacancies
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Get started by creating a new job post.
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/employer/post-job"
+                className="inline-flex items-center px-4 py-2 border border-black text-black rounded-md hover:bg-gray-100 transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Vacancy
+              </Link>
+            </div>
+          </div>
+        )}
 
-      {/* Modal for confirming job vacancy deletion */}
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete this job vacancy?</p>
-        <button onClick={handleDeleteVacancy}>Yes, Delete</button>
-        <button onClick={closeModal}>Cancel</button>
-      </Modal>
+        {/* Delete Vacancy Confirmation Dialog */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-md w-full p-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Delete Job Vacancy
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Are you sure you want to delete this job vacancy? This action
+                cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowDeleteConfirm(null)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteVacancy(showDeleteConfirm)}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-      {/* Modal for confirming company deletion */}
-      <Modal isOpen={companyModalIsOpen} onRequestClose={closeCompanyModal}>
-        <h2>Confirm Company Deletion</h2>
-        <p>
-          Are you sure you want to delete your company? This will also delete
-          all job vacancies related to your company.
-        </p>
-        <button onClick={handleDeleteCompany}>Yes, Delete Company</button>
-        <button onClick={closeCompanyModal}>Cancel</button>
-      </Modal>
+        {/* Delete Company Confirmation Dialog */}
+        {showCompanyDeleteConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-md w-full p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <Building2 className="h-6 w-6 text-red-500" />
+                <h3 className="text-lg font-medium text-gray-900">
+                  Delete Company
+                </h3>
+              </div>
+              <p className="text-sm text-gray-500 mb-6">
+                Are you sure you want to delete your company? This will
+                permanently remove all job vacancies and company data. This
+                action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowCompanyDeleteConfirm(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteCompany}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md flex items-center"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Company
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
