@@ -35,7 +35,7 @@ export default function JobSeekerSignInPage() {
       if (result?.error) {
         setError("Invalid email or password. Please try again.");
       } else {
-        window.location.href = "/jobseeker/dashboard";
+        window.location.href = "/jobseeker/profile";
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
