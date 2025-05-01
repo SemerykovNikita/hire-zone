@@ -22,6 +22,7 @@ import {
   Plus,
   DollarSign,
   Edit2,
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -259,6 +260,15 @@ export default function EmployerDashboard() {
                           title="View Reviews"
                         >
                           <Eye className="h-5 w-5" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            router.push(`/chat?jobVacancyId=${vacancy._id}`)
+                          }
+                          className="text-gray-400 hover:text-primary transition-colors"
+                          title="Open Chat"
+                        >
+                          <MessageCircle className="h-5 w-5" />
                         </button>
                         <button
                           onClick={() => setShowDeleteConfirm(vacancy._id)}

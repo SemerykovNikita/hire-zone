@@ -344,3 +344,45 @@ export async function getJobVacanciesBySearch(
     };
   }
 }
+
+export async function getJobVacanciesByEmployer(
+  employerId: string
+): Promise<IGetJobVacancyResponse> {
+  try {
+    await dbConnect();
+
+    const jobVacancies = await JobVacancyModel.find({
+      postedBy: employerId,
+    })
+      .populate("company")
+      .lean();
+
+    if (!jobVacancies || jobVacancies.length === 0) {
+      return {
+        success: false,
+        error: "No job vacancies found for this employer.",
+      };
+    }
+
+    const plainJobVacancies = jobVacancies.map((vacancy) => ({
+      ...vacancy,
+      _id: vacancy._id.toString(),
+      company: typeof vacancy.company === 'object' ? 
+        vacancy.company.name : 
+        vacancy.company.toString(),
+      postedBy: vacancy.postedBy.toString(),
+      createdAt: vacancy.createdAt.toISOString(),
+    }));
+
+    return {
+      success: true,
+      data: plainJobVacancies,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+}
