@@ -181,3 +181,29 @@ export async function deleteCompany(companyId: string) {
     };
   }
 }
+
+export async function getAllCompanies(): Promise<{
+  success: boolean;
+  data?: ICompany[];
+  error?: string;
+}> {
+  try {
+    await dbConnect();
+    const companies = await CompanyModel.find().lean<ICompany[]>();
+
+    return {
+      success: true,
+      data: companies.map((company) => ({
+        ...company,
+        _id: company._id.toString(),
+        owner: company.owner.toString(),
+        createdAt: company.createdAt.toISOString(),
+      })),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
