@@ -55,14 +55,14 @@ export default function JobVacancyDetailPage({
 
     try {
       if (isFavorite) {
-        const result = await removeFavorite(params.id);
+        const result = await removeFavorite(session.user.id, params.id);
         if (result.success) {
           setIsFavorite(false);
         } else {
           throw new Error(result.error);
         }
       } else {
-        const result = await addFavorite(params.id);
+        const result = await addFavorite(session.user.id, params.id);
         if (result.success) {
           setIsFavorite(true);
         } else {
