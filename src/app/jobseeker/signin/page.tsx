@@ -174,12 +174,12 @@ export default function JobSeekerSignInPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Need help?{" "}
+                  Are you an employer?{" "}
                   <Link
-                    href="/contact"
+                    href="/employer/signin"
                     className="font-medium text-primary hover:text-primary/80"
                   >
-                    Contact support
+                    Sign in here
                   </Link>
                 </span>
               </div>
