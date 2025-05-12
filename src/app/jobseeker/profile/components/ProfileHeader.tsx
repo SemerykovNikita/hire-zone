@@ -1,6 +1,7 @@
 "use client";
 
-import { User } from "lucide-react";
+import { User, Pencil } from "lucide-react";
+import Link from "next/link";
 import { IUser } from "@/models/User";
 
 interface ProfileHeaderProps {
@@ -9,7 +10,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ user }: ProfileHeaderProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 relative">
       <div className="flex items-center space-x-4">
         <div className="bg-primary/10 p-4 rounded-full">
           <User className="h-8 w-8 text-primary" />
@@ -23,6 +24,14 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
           </div>
         </div>
       </div>
+
+      <Link
+        href="/jobseeker/edit"
+        className="absolute top-6 right-6 inline-flex items-center space-x-2 px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition"
+      >
+        <Pencil className="w-4 h-4" />
+        <span>Edit Profile</span>
+      </Link>
     </div>
   );
 }

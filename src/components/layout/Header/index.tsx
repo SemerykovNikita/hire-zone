@@ -1,19 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { Briefcase } from "lucide-react";
+import { Briefcase, Heart, LayoutDashboard, Shield } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+
+interface NavItem {
+  label: string;
+  href: string;
+  roles: string[];
+}
 
 export default function Header() {
   const { data: session } = useSession();
+  const role = session?.user?.role || "guest";
 
-  // Need in future change some routes
-  const navItems = [
-    { label: "Find Jobs", href: "/jobs" },
-    { label: "Companies", href: "/companies" },
-    { label: "Post a Job", href: "/post-job" },
-    { label: "Career Advice", href: "/blog" },
+  const navItems: NavItem[] = [
+    {
+      label: "Find Jobs",
+      href: "/jobs",
+      roles: ["admin", "employer", "job_seeker", "guest"],
+    },
+    {
+      label: "Companies",
+      href: "/companies",
+      roles: ["admin", "employer", "job_seeker", "guest"],
+    },
+    {
+      label: "Post a Job",
+      href: "/employer/post-job",
+      roles: ["employer"],
+    },
   ];
+
+  const filteredNav = navItems.filter((item) => item.roles.includes(role));
+
+  const profileLink =
+    role === "employer"
+      ? "/employer/dashboard"
+      : role === "admin"
+      ? "/admin"
+      : "/jobseeker/profile";
 
   return (
     <header className="border-b">
@@ -25,7 +51,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+            {filteredNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -34,14 +60,45 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+
+            {role === "admin" && (
+              <Link
+                href="/admin"
+                className="text-gray-600 hover:text-primary transition-colors flex items-center space-x-1"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Admin Panel</span>
+              </Link>
+            )}
+
+            {role === "employer" && (
+              <Link
+                href="/employer/dashboard"
+                className="text-gray-600 hover:text-primary transition-colors flex items-center space-x-1"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Dashboard</span>
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center space-x-4">
+            <Link
+              href="/favorites"
+              className="text-gray-600 hover:text-primary transition-colors"
+              title="Favorites"
+            >
+              <Heart className="w-5 h-5" />
+            </Link>
+
             {session ? (
               <>
-                <span className="text-gray-700">
+                <Link
+                  href={profileLink}
+                  className="text-gray-700 hover:text-primary transition-colors"
+                >
                   Welcome, {session.user.firstName}!
-                </span>
+                </Link>
                 <button
                   onClick={() => signOut()}
                   className="text-gray-600 hover:text-primary transition-colors"
@@ -52,14 +109,14 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/signin"
+                  href="/jobseeker/signin"
                   className="text-gray-600 hover:text-primary transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
-                  href="/signup"
-                  className="text-gray-600  hover:text-primary transition-colors"
+                  href="/jobseeker/signup"
+                  className="text-gray-600 hover:text-primary transition-colors"
                 >
                   Sign Up
                 </Link>

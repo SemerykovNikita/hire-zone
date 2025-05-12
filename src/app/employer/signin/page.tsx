@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Briefcase, Mail, Lock, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
-export default function AdminSignInPage() {
+export default function EmployerSignInPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,7 +21,7 @@ export default function AdminSignInPage() {
       const result = await signIn("credentials", {
         email,
         password,
-        role: "admin",
+        role: "employer",
         redirect: false,
       });
 
@@ -123,15 +123,6 @@ export default function AdminSignInPage() {
                   Remember me
                 </label>
               </div>
-
-              <div className="text-sm">
-                <Link
-                  href="/admin/forgot-password"
-                  className="font-medium text-primary hover:text-primary/80"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
             </div>
 
             <div>
@@ -152,12 +143,12 @@ export default function AdminSignInPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Need help?{" "}
+                  Don't have an account?{" "}
                   <Link
-                    href="/contact"
+                    href="/employer/register"
                     className="font-medium text-primary hover:text-primary/80"
                   >
-                    Contact support
+                    Register as Employer
                   </Link>
                 </span>
               </div>
