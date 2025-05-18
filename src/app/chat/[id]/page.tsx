@@ -45,7 +45,7 @@ export default async function Page({
                       : "hover:bg-muted"
                   }`}
                 >
-                  <MessageSquare className="h-5 w-5 flex-shrink-0" />
+                  <MessageSquare className="h-5 w-5 flex-shrink-0 " />
                   <span className="truncate text-sm">
                     {chat.title || `Chat ${chatId.slice(-6)}`}
                   </span>
