@@ -1,15 +1,22 @@
 "use client";
 
-import { Building2, MapPin, DollarSign, ArrowRight } from "lucide-react";
+import {
+  Building2,
+  MapPin,
+  DollarSign,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IJobVacancyExtended } from "@/types/job";
 import { formatDate, formatSalary } from "@/utils/formatters";
 
 interface VacancyCardProps {
   vacancy: IJobVacancyExtended;
+  onAIRequest?: (id: string) => void;
 }
 
-export function VacancyCard({ vacancy }: VacancyCardProps) {
+export function VacancyCard({ vacancy, onAIRequest }: VacancyCardProps) {
   const router = useRouter();
   const {
     _id,
@@ -20,7 +27,6 @@ export function VacancyCard({ vacancy }: VacancyCardProps) {
     salaryRange,
     requirements,
     createdAt,
-    postedBy,
   } = vacancy;
 
   return (
@@ -65,13 +71,27 @@ export function VacancyCard({ vacancy }: VacancyCardProps) {
         ))}
       </div>
 
-      <button
-        onClick={() => router.push(`/job/${_id}`)}
-        className="mt-6 w-full flex items-center justify-center space-x-2 bg-primary text-black px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-      >
-        <span>View Details</span>
-        <ArrowRight className="h-4 w-4" />
-      </button>
+      <div className="mt-6 flex gap-2">
+        <button
+          onClick={() => router.push(`/job/${_id}`)}
+          className="w-full flex items-center justify-center space-x-2 bg-primary text-black px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          <span>View Details</span>
+          <ArrowRight className="h-4 w-4" />
+        </button>
+
+        <div className="relative group">
+          <button
+            onClick={() => onAIRequest?.(_id)}
+            className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors flex items-center justify-center"
+          >
+            <Sparkles className="w-5 h-5" />
+          </button>
+          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap">
+            Generate a suggestion for this vacancy
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
