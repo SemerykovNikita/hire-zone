@@ -28,7 +28,7 @@ export default function EmployerSignInPage() {
       if (result?.error) {
         setError("Invalid email or password. Please try again.");
       } else {
-        window.location.href = "/admin/dashboard";
+        window.location.href = "/employer/dashboard";
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
