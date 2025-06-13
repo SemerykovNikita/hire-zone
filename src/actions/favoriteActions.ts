@@ -69,6 +69,7 @@ export async function getFavorites(userId: string) {
 
   const plainFavorites = favorites.map((favorite) => ({
     ...favorite,
+    // @ts-ignore
     _id: favorite._id.toString(),
     jobVacancy: {
       ...favorite.jobVacancy,

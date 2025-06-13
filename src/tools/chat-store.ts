@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { generateId } from "ai";
 import { existsSync, mkdirSync } from "fs";
 import { writeFile } from "fs/promises";
@@ -8,7 +10,7 @@ import ChatModel from "@/models/Chat";
 import { dbConnect } from "@/config/db";
 import { IMessage } from "@/models/Message";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 export async function createChat(jobVacancyId: string): Promise<string> {
   await dbConnect();

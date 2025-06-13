@@ -1,7 +1,9 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getJobVacanciesBySearch } from "@/actions/jobVacancyActions";
 import { IGetJobVacancyResponse, IJobVacancyExtended } from "@/types/job";
 import { SearchFilters } from "@/components/SearchFilters";
@@ -12,7 +14,7 @@ import { useCompletion } from "ai/react";
 import Toast from "@/components/Toast";
 import ReactMarkdown from "react-markdown";
 
-export default function ResultsPage() {
+const PageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -218,5 +220,13 @@ export default function ResultsPage() {
         />
       )}
     </div>
+  );
+};
+
+export default function JobsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }

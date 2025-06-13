@@ -8,6 +8,8 @@ import { useRef, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";
 
+export const dynamic = "force-dynamic";
+
 export default function Chat({
   id,
   initialMessages,
@@ -43,12 +45,12 @@ export default function Chat({
       body: { jobVacancyId },
     });
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
 
   return (
-    <div className="flex flex-col flex-1 bg-white h-full max-h-screen">
+    <div className="flex flex-col flex-1 bg-white h-full overflow-hidden">
       {/* Chat header */}
       <div className="border-b border-gray-200 p-4">
         <h1 className="text-xl font-semibold text-gray-800">
@@ -57,7 +59,7 @@ export default function Chat({
       </div>
 
       {/* Messages container */}
-      <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-6">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-gray-500">

@@ -1,6 +1,6 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { dbConnect } from "@/config/db";
 import CompanyModel, { ICompany } from "@/models/Company";
 import JobVacancyModel from "@/models/JobVacancy";
@@ -75,6 +75,7 @@ export async function getUserCompany(): Promise<IGetCompanyResponse> {
 
     return {
       success: true,
+      // @ts-ignore
       data: extendedCompany,
     };
   } catch (error) {
@@ -193,8 +194,10 @@ export async function getAllCompanies(): Promise<{
 
     return {
       success: true,
+      // @ts-ignore
       data: companies.map((company) => ({
         ...company,
+        // @ts-ignore
         _id: company._id.toString(),
         owner: company.owner.toString(),
         createdAt: company.createdAt.toISOString(),

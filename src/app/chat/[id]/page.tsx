@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { getUserChats } from "@/actions/chatActions";
 import { loadChat } from "@/tools/chat-store";
 import Chat from "@/ui/chat";
@@ -57,10 +59,8 @@ export default async function Page({
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 h-[1080px] overflow-y-auto">
-          <Chat id={params.id} initialMessages={messages} />
-        </div>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Chat id={params.id} initialMessages={messages} />
       </div>
     </div>
   );

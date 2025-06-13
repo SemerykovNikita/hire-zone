@@ -31,7 +31,6 @@ const messageSchema = new mongoose.Schema<IMessage>({
   id: {
     type: String,
     required: true,
-    unique: true,
     default: () => new mongoose.Types.ObjectId().toHexString(),
   },
   createdAt: {

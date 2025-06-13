@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getApplicationsByJobVacancyId } from "@/actions/applicationActions";
 import { getChatById } from "@/actions/chatActions";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";

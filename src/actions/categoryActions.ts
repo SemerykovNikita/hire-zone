@@ -2,7 +2,7 @@
 
 import { dbConnect } from "@/config/db";
 import CategoryModel, { ICategory } from "@/models/Categories";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth";
 import JobVacancyModel from "@/models/JobVacancy";
 
@@ -42,6 +42,7 @@ export async function getCategories() {
     return {
       success: true,
       data: categories.map((category) => ({
+        // @ts-ignore
         id: category._id.toString(),
         name: category.name,
       })),

@@ -1,6 +1,5 @@
 "use server";
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { dbConnect } from "@/config/db";
 import ChatModel from "@/models/Chat";
 import JobVacancyModel from "@/models/JobVacancy";

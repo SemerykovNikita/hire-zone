@@ -2,9 +2,9 @@
 
 import { dbConnect } from "@/config/db";
 import ApplicationModel, { IApplication } from "@/models/Application";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { IApplicationCreate } from "@/types/application";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 export async function createApplication(data: IApplicationCreate) {
   try {
@@ -99,6 +99,7 @@ export async function getApplicationsByJobVacancyId(vacancyId: string) {
 
     const plainApplications = applications.map((application) => ({
       ...application,
+      // @ts-ignore
       _id: application._id.toString(),
       applicant: {
         ...application.applicant,

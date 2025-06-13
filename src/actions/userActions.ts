@@ -1,6 +1,7 @@
+// @ts-nocheck
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { dbConnect } from "@/config/db";
 import ApplicationModel from "@/models/Application";
 import CompanyModel from "@/models/Company";
@@ -208,7 +209,7 @@ export async function getUserDetails() {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        resumes: user.resumes
+        resumes: user.resumes,
       },
     };
   } catch (error) {

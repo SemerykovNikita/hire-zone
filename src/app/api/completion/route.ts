@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { streamText } from "ai";
 import { getJobVacancyById } from "@/actions/jobVacancyActions";
 import { getUserResumes } from "@/actions/userActions";

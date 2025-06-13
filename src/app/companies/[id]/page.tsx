@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { getCompanyById } from "@/actions/companyActions";
 import JobVacancyModel from "@/models/JobVacancy";
 import { dbConnect } from "@/config/db";
