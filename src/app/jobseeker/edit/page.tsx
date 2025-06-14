@@ -32,10 +32,10 @@ export default function UpdateProfilePage() {
         if (result.success) {
           setUserData(result.data);
         } else {
-          setError(result.error || "Failed to load user details.");
+          setError(result.error || "Не вдалося завантажити дані користувача.");
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       } finally {
         setLoading(false);
       }
@@ -62,13 +62,13 @@ export default function UpdateProfilePage() {
         email: userData.email,
       });
       if (result.success) {
-        setSuccess("Profile updated successfully!");
+        setSuccess("Профіль успішно оновлено!");
         setTimeout(() => router.push("/user/profile"), 2000);
       } else {
-        setError(result.error || "Failed to update profile.");
+        setError(result.error || "Не вдалося оновити профіль.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +76,7 @@ export default function UpdateProfilePage() {
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
+      "Ви впевнені, що хочете видалити обліковий запис? Цю дію не можна скасувати."
     );
 
     if (confirmed) {
@@ -86,10 +86,10 @@ export default function UpdateProfilePage() {
           await signOut();
           router.push("/goodbye");
         } else {
-          setError(result.error || "Failed to delete account.");
+          setError(result.error || "Не вдалося видалити обліковий запис.");
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       }
     }
   };
@@ -107,7 +107,9 @@ export default function UpdateProfilePage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6 bg-primary/5 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-gray-900">Update Profile</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Оновити профіль
+            </h1>
           </div>
 
           {(error || success) && (
@@ -133,7 +135,7 @@ export default function UpdateProfilePage() {
               >
                 <div className="flex items-center space-x-2">
                   <User className="h-4 w-4" />
-                  <span>First Name</span>
+                  <span>Ім’я</span>
                 </div>
               </label>
               <input
@@ -154,7 +156,7 @@ export default function UpdateProfilePage() {
               >
                 <div className="flex items-center space-x-2">
                   <User className="h-4 w-4" />
-                  <span>Last Name</span>
+                  <span>Прізвище</span>
                 </div>
               </label>
               <input
@@ -175,7 +177,7 @@ export default function UpdateProfilePage() {
               >
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>Email</span>
+                  <span>Електронна пошта</span>
                 </div>
               </label>
               <input
@@ -198,12 +200,12 @@ export default function UpdateProfilePage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    Updating...
+                    Оновлення...
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4 mr-2" />
-                    Update Profile
+                    Оновити профіль
                   </>
                 )}
               </button>
@@ -212,12 +214,12 @@ export default function UpdateProfilePage() {
 
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Delete Account
+              Видалити обліковий запис
             </h2>
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
               <p className="text-sm text-red-700">
-                Warning: Deleting your account is permanent and cannot be
-                undone. All your data will be permanently removed.
+                Увага: Видалення облікового запису є незворотним. Всі ваші дані
+                будуть остаточно видалені.
               </p>
             </div>
             <button
@@ -226,7 +228,7 @@ export default function UpdateProfilePage() {
               className="w-full flex items-center justify-center px-4 py-2 border border-red-600 rounded-lg text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Delete Account
+              Видалити обліковий запис
             </button>
           </div>
         </div>

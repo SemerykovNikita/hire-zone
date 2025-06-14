@@ -48,7 +48,7 @@ export default function UpdateCompanyPage() {
           website: companyResponse.data.website || "",
         });
       } catch (err) {
-        setError("An error occurred while fetching the company.");
+        setError("Під час отримання даних компанії сталася помилка.");
       } finally {
         setLoading(false);
       }
@@ -79,10 +79,10 @@ export default function UpdateCompanyPage() {
         setSuccess(true);
         setTimeout(() => router.push("/employer/dashboard"), 2000);
       } else {
-        setError(result.error || "Failed to update the company.");
+        setError(result.error || "Не вдалося оновити компанію.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -104,12 +104,12 @@ export default function UpdateCompanyPage() {
             <div className="flex items-center space-x-3">
               <Building2 className="h-8 w-8 text-primary" />
               <h1 className="text-2xl font-bold text-gray-900">
-                Update Company Profile
+                Оновлення профілю компанії
               </h1>
             </div>
             <p className="mt-2 text-gray-600">
-              Keep your company information up to date to attract the best
-              candidates.
+              Актуалізуйте інформацію про компанію, щоб привабити найкращих
+              кандидатів.
             </p>
           </div>
 
@@ -122,7 +122,7 @@ export default function UpdateCompanyPage() {
                   }`}
                 />
                 <p className={error ? "text-red-700" : "text-green-700"}>
-                  {error || "Company updated successfully! Redirecting..."}
+                  {error || "Компанію успішно оновлено! Переадресація..."}
                 </p>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function UpdateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4" />
-                  <span>Company Name</span>
+                  <span>Назва компанії</span>
                 </div>
               </label>
               <input
@@ -147,7 +147,7 @@ export default function UpdateCompanyPage() {
                 onChange={handleInputChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Enter your company name"
+                placeholder="Введіть назву компанії"
               />
             </div>
 
@@ -158,7 +158,7 @@ export default function UpdateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <FileText className="h-4 w-4" />
-                  <span>Company Description</span>
+                  <span>Опис компанії</span>
                 </div>
               </label>
               <textarea
@@ -168,7 +168,7 @@ export default function UpdateCompanyPage() {
                 onChange={handleInputChange}
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Tell us about your company..."
+                placeholder="Розкажіть про вашу компанію..."
               />
             </div>
 
@@ -179,7 +179,7 @@ export default function UpdateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <Globe className="h-4 w-4" />
-                  <span>Company Website</span>
+                  <span>Вебсайт компанії</span>
                 </div>
               </label>
               <input
@@ -202,12 +202,12 @@ export default function UpdateCompanyPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    Updating...
+                    Оновлення...
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4 mr-2" />
-                    Update Company
+                    Оновити компанію
                   </>
                 )}
               </button>
@@ -217,12 +217,12 @@ export default function UpdateCompanyPage() {
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <div className="flex justify-center text-sm">
               <span className="text-gray-500">
-                Need help?{" "}
+                Потрібна допомога?{" "}
                 <Link
                   href="/contact"
                   className="font-medium text-primary hover:text-primary/80"
                 >
-                  Contact support
+                  Зв’яжіться з підтримкою
                 </Link>
               </span>
             </div>

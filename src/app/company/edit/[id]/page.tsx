@@ -44,13 +44,13 @@ export default function EditCompanyPage({
             setFormData(company);
             setIsOwner(true);
           } else {
-            setError("You do not have permission to edit this company.");
+            setError("У вас немає дозволу на редагування цієї компанії.");
           }
         } else {
-          setError(response.error || "Company not found.");
+          setError(response.error || "Компанію не знайдено.");
         }
       } catch (err) {
-        setError("An error occurred while fetching the company data.");
+        setError("Сталася помилка під час завантаження даних компанії.");
       }
     };
 
@@ -88,10 +88,10 @@ export default function EditCompanyPage({
       if (result.success) {
         router.push("/employer/dashboard");
       } else {
-        setError(result.error || "Failed to update the company.");
+        setError(result.error || "Не вдалося оновити компанію.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -127,7 +127,7 @@ export default function EditCompanyPage({
           <div className="flex items-center gap-2 text-yellow-600">
             <AlertCircle className="h-5 w-5" />
             <p className="font-medium">
-              You do not have permission to edit this company.
+              У вас немає дозволу на редагування цієї компанії.
             </p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function EditCompanyPage({
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
             <Building2 className="h-8 w-8" />
-            Edit Company
+            Редагувати компанію
           </h1>
         </div>
 
@@ -159,13 +159,13 @@ export default function EditCompanyPage({
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
-                  Company Name
+                  Назва компанії
                 </label>
                 <div className="relative">
                   <input
                     type="text"
                     name="name"
-                    placeholder="Company Name"
+                    placeholder="Назва компанії"
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -177,12 +177,12 @@ export default function EditCompanyPage({
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
-                  Description
+                  Опис
                 </label>
                 <div className="relative">
                   <textarea
                     name="description"
-                    placeholder="Company Description"
+                    placeholder="Опис компанії"
                     value={formData.description || ""}
                     onChange={handleChange}
                     rows={4}
@@ -194,7 +194,7 @@ export default function EditCompanyPage({
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
-                  Website
+                  Вебсайт
                 </label>
                 <div className="relative">
                   <input
@@ -217,12 +217,12 @@ export default function EditCompanyPage({
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    Updating...
+                    Оновлення...
                   </>
                 ) : (
                   <>
                     <Save className="h-5 w-5" />
-                    Update Company
+                    Оновити компанію
                   </>
                 )}
               </button>

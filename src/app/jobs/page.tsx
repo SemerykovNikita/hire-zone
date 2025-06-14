@@ -36,14 +36,14 @@ const PageContent = () => {
     api: "/api/completion",
     onError(err) {
       setToast({
-        message: "Error during generating ai suggestion",
+        message: "Помилка під час генерації пропозиції",
         type: "error",
       });
       setIsModalOpen(false);
     },
     onFinish() {
       setToast({
-        message: "Your suggestion generated successful",
+        message: "Пропозиція успішно згенерована",
         type: "success",
       });
     },
@@ -74,10 +74,10 @@ const PageContent = () => {
           setTotalPages(Math.ceil(response.pagination.total / limit));
         }
       } else {
-        setError(response.error || "Failed to fetch job vacancies.");
+        setError(response.error || "Не вдалося завантажити вакансії.");
       }
     } catch (err) {
-      setError("An error occurred while fetching job vacancies.");
+      setError("Сталася помилка під час завантаження вакансій.");
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ const PageContent = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Job Opportunities
+            Пропозиції роботи
           </h1>
         </div>
 
@@ -160,7 +160,7 @@ const PageContent = () => {
                   page === 1 ? "bg-gray-300" : "bg-black text-white"
                 }`}
               >
-                Previous
+                Попередня
               </button>
               <button
                 onClick={handleNextPage}
@@ -169,17 +169,17 @@ const PageContent = () => {
                   page === totalPages ? "bg-gray-300" : "bg-black text-white"
                 }`}
               >
-                Next
+                Наступна
               </button>
             </div>
           </>
         ) : (
           <div className="text-center py-12 bg-white rounded-lg shadow-sm">
             <p className="text-xl text-gray-600">
-              No vacancies found for this search.
+              За заданими критеріями вакансій не знайдено.
             </p>
             <p className="mt-2 text-gray-500">
-              Try adjusting your search criteria.
+              Спробуйте змінити параметри пошуку.
             </p>
           </div>
         )}
@@ -188,11 +188,9 @@ const PageContent = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto text-black">
-            <h2 className="text-xl font-semibold mb-4">
-              AI vacancy suggestion
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Пропозиція від AI</h2>
             {isLoading ? (
-              <p className="text-black">Generating...</p>
+              <p className="text-black">Генерація...</p>
             ) : (
               <div className="max-h-96 overflow-y-auto">
                 <div className="prose max-w-none prose-black">
@@ -205,7 +203,7 @@ const PageContent = () => {
                 onClick={() => setIsModalOpen(false)}
                 className="px-4 py-2 border border-black text-black rounded-full hover:bg-black hover:text-white transition"
               >
-                Close
+                Закрити
               </button>
             </div>
           </div>
@@ -225,7 +223,7 @@ const PageContent = () => {
 
 export default function JobsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Завантаження...</div>}>
       <PageContent />
     </Suspense>
   );

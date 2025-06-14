@@ -34,7 +34,7 @@ export default function CreateCompanyPage() {
     setError(null);
 
     if (!session?.user) {
-      setError("You must be logged in to create a company.");
+      setError("Щоб створити компанію, потрібно увійти в систему.");
       setIsSubmitting(false);
       return;
     }
@@ -47,10 +47,10 @@ export default function CreateCompanyPage() {
       if (result.success) {
         router.push("/employer/dashboard");
       } else {
-        setError(result.error || "Failed to create company.");
+        setError(result.error || "Не вдалося створити компанію.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -64,11 +64,11 @@ export default function CreateCompanyPage() {
             <div className="flex items-center space-x-3">
               <Building2 className="h-8 w-8 text-primary" />
               <h1 className="text-2xl font-bold text-gray-900">
-                Create Your Company Profile
+                Створіть профіль компанії
               </h1>
             </div>
             <p className="mt-2 text-gray-600">
-              Set up your company profile to start posting job opportunities.
+              Заповніть профіль компанії, щоб почати публікацію вакансій.
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default function CreateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-4 w-4" />
-                  <span>Company Name</span>
+                  <span>Назва компанії</span>
                 </div>
               </label>
               <input
@@ -100,7 +100,7 @@ export default function CreateCompanyPage() {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Enter your company name"
+                placeholder="Введіть назву компанії"
               />
             </div>
 
@@ -111,7 +111,7 @@ export default function CreateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <FileText className="h-4 w-4" />
-                  <span>Company Description</span>
+                  <span>Опис компанії</span>
                 </div>
               </label>
               <textarea
@@ -121,7 +121,7 @@ export default function CreateCompanyPage() {
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Tell us about your company..."
+                placeholder="Розкажіть про вашу компанію..."
               />
             </div>
 
@@ -132,7 +132,7 @@ export default function CreateCompanyPage() {
               >
                 <div className="flex items-center space-x-2">
                   <Globe className="h-4 w-4" />
-                  <span>Company Website</span>
+                  <span>Вебсайт компанії</span>
                 </div>
               </label>
               <input
@@ -155,10 +155,10 @@ export default function CreateCompanyPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    Creating Company...
+                    Створення компанії...
                   </>
                 ) : (
-                  "Create Company"
+                  "Створити компанію"
                 )}
               </button>
             </div>
@@ -167,12 +167,12 @@ export default function CreateCompanyPage() {
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <div className="flex justify-center text-sm">
               <span className="text-gray-500">
-                Need help?{" "}
+                Потрібна допомога?{" "}
                 <Link
                   href="/contact"
                   className="font-medium text-primary hover:text-primary/80"
                 >
-                  Contact support
+                  Зверніться до підтримки
                 </Link>
               </span>
             </div>

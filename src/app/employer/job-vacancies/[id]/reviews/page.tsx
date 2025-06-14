@@ -33,7 +33,7 @@ export default function JobVacancyReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { id: vacancyId } = useParams(); // Use useParams to get the ID from the URL
+  const { id: vacancyId } = useParams();
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -45,10 +45,10 @@ export default function JobVacancyReviewsPage() {
           if (result.success && Array.isArray(result.data)) {
             setApplications(result.data);
           } else {
-            setError(result.error || "Failed to load applications.");
+            setError(result.error || "Не вдалося завантажити заявки.");
           }
         } catch (err) {
-          setError("An unknown error occurred.");
+          setError("Сталася невідома помилка.");
         } finally {
           setLoading(false);
         }
@@ -77,7 +77,7 @@ export default function JobVacancyReviewsPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
             <Briefcase className="h-8 w-8" />
-            Applications Review
+            Перегляд заявок
           </h1>
         </div>
 
@@ -133,7 +133,13 @@ export default function JobVacancyReviewsPage() {
                               : "bg-gray-100 text-gray-800"
                           }`}
                       >
-                        {application.status}
+                        {application.status === "pending"
+                          ? "Очікує"
+                          : application.status === "accepted"
+                          ? "Прийнято"
+                          : application.status === "rejected"
+                          ? "Відхилено"
+                          : application.status}
                       </span>
                     </div>
 
@@ -141,7 +147,7 @@ export default function JobVacancyReviewsPage() {
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-gray-700">
                           <FileText className="h-5 w-5" />
-                          <h3 className="font-medium">Cover Letter</h3>
+                          <h3 className="font-medium">Супровідний лист</h3>
                         </div>
                         <p className="text-gray-600 whitespace-pre-line pl-7">
                           {application.coverLetter}
@@ -158,7 +164,7 @@ export default function JobVacancyReviewsPage() {
                           className="inline-flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
                         >
                           <ExternalLink className="h-4 w-4" />
-                          View Resume
+                          Переглянути резюме
                         </a>
                       </div>
                     )}
@@ -167,7 +173,7 @@ export default function JobVacancyReviewsPage() {
               ))
             ) : (
               <div className="bg-white p-6 rounded-lg shadow text-center text-gray-500">
-                <p>No applications found for this job vacancy.</p>
+                <p>Заявки для цієї вакансії не знайдено.</p>
               </div>
             )}
           </div>

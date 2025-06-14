@@ -39,10 +39,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
         if (result.success && result.data) {
           setJobVacancy(result.data);
         } else {
-          setError(result.error || "Failed to fetch job vacancy details.");
+          setError(result.error || "Не вдалося отримати дані про вакансію.");
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       } finally {
         setLoading(false);
       }
@@ -92,7 +92,9 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
 
         const saveResumeResult = await saveResumeUrl(uploadedResumeUrl);
         if (!saveResumeResult.success) {
-          throw new Error(saveResumeResult.error || "Failed to save resume.");
+          throw new Error(
+            saveResumeResult.error || "Не вдалося зберегти резюме."
+          );
         }
       }
 
@@ -108,12 +110,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
       if (result.success) {
         setShowSuccessModal(true);
       } else {
-        setError(result.error || "Failed to submit the application.");
+        setError(result.error || "Не вдалося надіслати заявку.");
       }
     } catch (err: any) {
-      setError(
-        err.message || "An error occurred while submitting the application."
-      );
+      setError(err.message || "Сталася помилка під час надсилання заявки.");
     } finally {
       setSubmitting(false);
     }
@@ -143,28 +143,25 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
   if (!jobVacancy) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">No job vacancy found.</p>
+        <p className="text-gray-600">Вакансію не знайдено.</p>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
             <h2 className="text-xl font-semibold text-green-600 mb-4">
-              Success!
+              Успішно!
             </h2>
-            <p className="text-gray-700 mb-6">
-              Your application has been submitted successfully.
-            </p>
+            <p className="text-gray-700 mb-6">Вашу заявку успішно надіслано.</p>
             <button
               onClick={() => router.push("/")}
               className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
             >
-              Back to Home
+              На головну
             </button>
           </div>
         </div>
@@ -172,7 +169,6 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {/* Job Header */}
           <div className="bg-primary/5 p-6 border-b border-gray-200">
             <div className="flex items-start space-x-4">
               <div className="bg-white p-3 rounded-lg shadow-sm">
@@ -180,7 +176,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                  Apply for {jobVacancy.title}
+                  Подати заявку на {jobVacancy.title}
                 </h1>
                 <div className="flex items-center text-gray-600">
                   <Building2 className="h-4 w-4 mr-2" />
@@ -190,13 +186,11 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          {/* Job Description */}
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold mb-2">About the Position</h2>
+            <h2 className="text-lg font-semibold mb-2">Про вакансію</h2>
             <p className="text-gray-600">{jobVacancy.description}</p>
           </div>
 
-          {/* Application Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div>
               <label
@@ -205,7 +199,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
               >
                 <div className="flex items-center space-x-2">
                   <FileText className="h-4 w-4" />
-                  <span>Cover Letter</span>
+                  <span>Супровідний лист</span>
                 </div>
               </label>
               <textarea
@@ -214,7 +208,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                 onChange={(e) => setCoverLetter(e.target.value)}
                 required
                 className="w-full h-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Tell us why you're the perfect fit for this position..."
+                placeholder="Розкажіть, чому ви ідеально підходите для цієї посади..."
               />
             </div>
 
@@ -223,7 +217,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                 htmlFor="resumeSelection"
                 className="block text-sm font-medium text-gray-700"
               >
-                Select Existing Resume
+                Вибрати збережене резюме
               </label>
               <div className="relative">
                 <select
@@ -232,10 +226,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                   value={selectedResume}
                   className="w-full appearance-none px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all pr-10"
                 >
-                  <option value="">Upload new resume</option>
+                  <option value="">Завантажити нове резюме</option>
                   {userResumes.map((resume, index) => (
                     <option key={index} value={resume.url}>
-                      Resume from{" "}
+                      Резюме від{" "}
                       {new Date(resume.uploadedAt).toLocaleDateString()}
                     </option>
                   ))}
@@ -252,7 +246,7 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                 htmlFor="resumeFile"
                 className="block text-sm font-medium text-gray-700"
               >
-                Upload New Resume
+                Завантажити нове резюме
               </label>
               <div className="relative">
                 <input
@@ -286,10 +280,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                       <>
                         <Upload className="w-8 h-8 text-gray-400 mb-2" />
                         <p className="text-gray-700">
-                          Click to upload or drag and drop
+                          Натисніть для завантаження або перетягніть файл сюди
                         </p>
                         <p className="text-gray-500 text-sm mt-1">
-                          PDF, DOC, or DOCX (Max 5MB)
+                          PDF, DOC або DOCX (до 5MB)
                         </p>
                       </>
                     )}
@@ -321,10 +315,10 @@ export default function ApplyJobPage({ params }: { params: { id: string } }) {
                 {submitting ? (
                   <span className="flex items-center justify-center">
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Submitting...
+                    Відправлення...
                   </span>
                 ) : (
-                  "Submit Application"
+                  "Подати заявку"
                 )}
               </button>
             </div>

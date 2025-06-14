@@ -40,7 +40,7 @@ export function VacancyCard({ vacancy, onAIRequest }: VacancyCardProps) {
           <div className="flex items-center text-gray-600">
             <Building2 className="h-4 w-4 mr-2" />
             <span>
-              {typeof company === "string" ? company : "Company Name"}
+              {typeof company === "string" ? company : "Назва компанії"}
             </span>
           </div>
 
@@ -78,7 +78,7 @@ export function VacancyCard({ vacancy, onAIRequest }: VacancyCardProps) {
           onClick={() => router.push(`/job/${_id}`)}
           className="w-full flex items-center justify-center space-x-2 bg-primary text-black px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
         >
-          <span>View Details</span>
+          <span>Переглянути деталі</span>
           <ArrowRight className="h-4 w-4" />
         </button>
 
@@ -91,7 +91,7 @@ export function VacancyCard({ vacancy, onAIRequest }: VacancyCardProps) {
               <Sparkles className="w-5 h-5" />
             </button>
             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap">
-              Generate a suggestion for this vacancy
+              Згенерувати рекомендацію до вакансії
             </div>
           </div>
         )}

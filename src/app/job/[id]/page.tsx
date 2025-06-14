@@ -31,10 +31,12 @@ export default function JobVacancyDetailPage({
         if (result.success && result.data) {
           setJobVacancy(result.data);
         } else {
-          setError(result.error || "Failed to fetch job vacancy details.");
+          setError(
+            result.error || "Не вдалося завантажити інформацію про вакансію."
+          );
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       } finally {
         setLoading(false);
       }
@@ -49,7 +51,7 @@ export default function JobVacancyDetailPage({
 
   const handleFavoriteToggle = async () => {
     if (!session?.user) {
-      alert("Please log in to manage favorites.");
+      alert("Будь ласка, увійдіть, щоб додавати в обране.");
       return;
     }
 
@@ -70,21 +72,21 @@ export default function JobVacancyDetailPage({
         }
       }
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to update favorites");
+      alert(err instanceof Error ? err.message : "Не вдалося оновити обране");
     }
   };
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
-  if (!jobVacancy) return <ErrorState message="No job vacancy found." />;
+  if (!jobVacancy) return <ErrorState message="Вакансію не знайдено." />;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Main Content - Left Side */}
+          {/* Головна частина - Ліва панель */}
           <div className="flex-1 space-y-6">
-            {/* Job Header */}
+            {/* Заголовок вакансії */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <h1 className="text-3xl font-bold text-gray-900">
@@ -113,19 +115,19 @@ export default function JobVacancyDetailPage({
               </div>
             </div>
 
-            {/* Job Description */}
+            {/* Опис вакансії */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold mb-4">Job Description</h2>
+              <h2 className="text-2xl font-semibold mb-4">Опис вакансії</h2>
               <p className="text-gray-600 whitespace-pre-wrap">
                 {jobVacancy.description}
               </p>
             </div>
 
-            {/* Requirements */}
+            {/* Вимоги */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <ListChecks className="h-6 w-6 text-primary" />
-                <h2 className="text-2xl font-semibold">Requirements</h2>
+                <h2 className="text-2xl font-semibold">Вимоги</h2>
               </div>
               <ul className="list-disc list-inside space-y-2 text-gray-600">
                 {jobVacancy.requirements.map((req: string, index: number) => (
@@ -135,7 +137,7 @@ export default function JobVacancyDetailPage({
             </div>
           </div>
 
-          {/* Company Information - Right Side */}
+          {/* Інформація про компанію - Права панель */}
           <div className="lg:w-80 flex-shrink-0">
             <div className="sticky top-6">
               <CompanyInfo company={jobVacancy.company} />

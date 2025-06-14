@@ -28,12 +28,12 @@ export default function AdminSignInPage() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password. Please try again.");
+        setError("Невірна електронна пошта або пароль. Спробуйте ще раз.");
       } else {
         window.location.href = "/admin/dashboard";
       }
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError("Сталася неочікувана помилка. Спробуйте пізніше.");
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +53,7 @@ export default function AdminSignInPage() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Admin Sign In
+                Вхід адміністратора
               </h2>
             </div>
             <div>
@@ -61,7 +61,7 @@ export default function AdminSignInPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Електронна пошта
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -84,7 +84,7 @@ export default function AdminSignInPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Пароль
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -108,7 +108,7 @@ export default function AdminSignInPage() {
                 disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent bg-black text-white rounded-md shadow-sm text-sm font-medium  bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isLoading ? "Вхід..." : "Увійти"}
               </button>
             </div>
           </form>
@@ -120,12 +120,12 @@ export default function AdminSignInPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Need help?{" "}
+                  Потрібна допомога?{" "}
                   <Link
                     href="/contact"
                     className="font-medium text-primary hover:text-primary/80"
                   >
-                    Contact support
+                    Зверніться до підтримки
                   </Link>
                 </span>
               </div>

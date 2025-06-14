@@ -18,17 +18,17 @@ export default async function Page({
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Sidebar */}
+      {/* Бокова панель */}
       <div className="w-64 border-r bg-muted/40 p-4 hidden md:block">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Your Chats</h2>
+            <h2 className="text-xl font-semibold">Ваші чати</h2>
             <Link
               href="/chat"
               className="inline-flex items-center justify-center rounded-full bg-primary p-2 text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               <Plus className="h-5 w-5" />
-              <span className="sr-only">New Chat</span>
+              <span className="sr-only">Новий чат</span>
             </Link>
           </div>
 
@@ -49,7 +49,7 @@ export default async function Page({
                 >
                   <MessageSquare className="h-5 w-5 flex-shrink-0" />
                   <span className="truncate text-sm">
-                    {chat.title || `Chat ${chatId.slice(-6)}`}
+                    {chat.title || `Чат ${chatId.slice(-6)}`}
                   </span>
                 </Link>
               );
@@ -58,7 +58,7 @@ export default async function Page({
         </div>
       </div>
 
-      {/* Main Chat Area */}
+      {/* Основна область чату */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Chat id={params.id} initialMessages={messages} />
       </div>

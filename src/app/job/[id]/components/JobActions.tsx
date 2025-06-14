@@ -20,7 +20,7 @@ export function JobActions({
         className="flex-1 flex items-center justify-center space-x-2 bg-primary text-black px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
       >
         <Send className="h-5 w-5" />
-        <span>Submit Application</span>
+        <span>Відгукнутися на вакансію</span>
       </button>
 
       <button
@@ -33,7 +33,7 @@ export function JobActions({
         } ${!isLoggedIn && "opacity-50 cursor-not-allowed"}`}
       >
         <Heart className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`} />
-        <span>{isFavorite ? "Remove from Favorites" : "Add to Favorites"}</span>
+        <span>{isFavorite ? "Видалити з обраного" : "Додати в обране"}</span>
       </button>
     </div>
   );

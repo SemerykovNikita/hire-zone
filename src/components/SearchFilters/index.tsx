@@ -9,6 +9,7 @@ interface SearchFiltersProps {
     city?: string;
     type?: string;
     salary?: string;
+    industry?: string;
   }) => void;
   initialFilters?: {
     title?: string;
@@ -25,6 +26,7 @@ export function SearchFilters({
     city: initialFilters?.city || "",
     type: "",
     salary: "",
+    industry: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,12 +37,12 @@ export function SearchFilters({
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-8">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Job title or keyword"
+              placeholder="Назва посади або ключове слово"
               value={filters.title}
               onChange={(e) =>
                 setFilters({ ...filters, title: e.target.value })
@@ -53,7 +55,7 @@ export function SearchFilters({
             <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="City or location"
+              placeholder="Місто або локація"
               value={filters.city}
               onChange={(e) => setFilters({ ...filters, city: e.target.value })}
               className="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
@@ -67,11 +69,11 @@ export function SearchFilters({
               onChange={(e) => setFilters({ ...filters, type: e.target.value })}
               className="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
             >
-              <option value="">Job Type</option>
-              <option value="full-time">Full Time</option>
-              <option value="part-time">Part Time</option>
-              <option value="contract">Contract</option>
-              <option value="internship">Internship</option>
+              <option value="">Тип зайнятості</option>
+              <option value="full-time">Повна зайнятість</option>
+              <option value="part-time">Неповна зайнятість</option>
+              <option value="contract">Контракт</option>
+              <option value="internship">Стажування</option>
             </select>
           </div>
 
@@ -84,11 +86,31 @@ export function SearchFilters({
               }
               className="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
             >
-              <option value="">Salary Range</option>
+              <option value="">Рівень зарплати</option>
               <option value="0-50000">$0 - $50,000</option>
               <option value="50000-100000">$50,000 - $100,000</option>
               <option value="100000-150000">$100,000 - $150,000</option>
               <option value="150000+">$150,000+</option>
+            </select>
+          </div>
+
+          <div className="relative">
+            <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <select
+              value={filters.industry}
+              onChange={(e) =>
+                setFilters({ ...filters, industry: e.target.value })
+              }
+              className="pl-10 w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary"
+            >
+              <option value="">Сфера діяльності</option>
+              <option value="it">Інформаційні технології</option>
+              <option value="finance">Фінанси</option>
+              <option value="education">Освіта</option>
+              <option value="healthcare">Охорона здоров'я</option>
+              <option value="marketing">Маркетинг</option>
+              <option value="sales">Продажі</option>
+              <option value="logistics">Логістика</option>
             </select>
           </div>
         </div>
@@ -98,7 +120,7 @@ export function SearchFilters({
             type="submit"
             className="bg-primary text-black px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Search Jobs
+            Знайти вакансії
           </button>
         </div>
       </form>

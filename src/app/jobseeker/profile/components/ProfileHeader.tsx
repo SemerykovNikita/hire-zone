@@ -17,7 +17,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome, {user.firstName} {user.lastName}!
+            Вітаємо, {user.firstName} {user.lastName}!
           </h1>
           <div className="flex space-x-4 text-gray-600 mt-2">
             <span>{user.email}</span>
@@ -30,7 +30,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
         className="absolute top-6 right-6 inline-flex items-center space-x-2 px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition"
       >
         <Pencil className="w-4 h-4" />
-        <span>Edit Profile</span>
+        <span>Редагувати профіль</span>
       </Link>
     </div>
   );

@@ -16,17 +16,17 @@ export default function Header() {
 
   const navItems: NavItem[] = [
     {
-      label: "Find Jobs",
+      label: "Знайти роботу",
       href: "/jobs",
       roles: ["admin", "employer", "job_seeker", "guest"],
     },
     {
-      label: "Companies",
+      label: "Компанії",
       href: "/companies",
       roles: ["admin", "employer", "job_seeker", "guest"],
     },
     {
-      label: "Post a Job",
+      label: "Опублікувати вакансію",
       href: "/employer/post-job",
       roles: ["employer"],
     },
@@ -67,7 +67,7 @@ export default function Header() {
                 className="text-gray-600 hover:text-primary transition-colors flex items-center space-x-1"
               >
                 <Shield className="w-4 h-4" />
-                <span>Admin Panel</span>
+                <span>Панель адміністратора</span>
               </Link>
             )}
 
@@ -77,7 +77,7 @@ export default function Header() {
                 className="text-gray-600 hover:text-primary transition-colors flex items-center space-x-1"
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
+                <span>Кабінет</span>
               </Link>
             )}
           </nav>
@@ -86,7 +86,7 @@ export default function Header() {
             <Link
               href="/favorites"
               className="text-gray-600 hover:text-primary transition-colors"
-              title="Favorites"
+              title="Обране"
             >
               <Heart className="w-5 h-5" />
             </Link>
@@ -97,13 +97,13 @@ export default function Header() {
                   href={profileLink}
                   className="text-gray-700 hover:text-primary transition-colors"
                 >
-                  Welcome, {session.user.firstName}!
+                  Вітаємо, {session.user.firstName}!
                 </Link>
                 <button
                   onClick={() => signOut()}
                   className="text-gray-600 hover:text-primary transition-colors"
                 >
-                  Sign Out
+                  Вийти
                 </button>
               </>
             ) : (
@@ -112,13 +112,13 @@ export default function Header() {
                   href="/jobseeker/signin"
                   className="text-gray-600 hover:text-primary transition-colors"
                 >
-                  Sign In
+                  Увійти
                 </Link>
                 <Link
                   href="/jobseeker/signup"
                   className="text-gray-600 hover:text-primary transition-colors"
                 >
-                  Sign Up
+                  Зареєструватися
                 </Link>
               </>
             )}

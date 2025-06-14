@@ -29,7 +29,7 @@ export function JobCard({ job }: JobCardProps) {
           </h3>
           <div className="flex items-center text-gray-600 mb-2">
             <Building2 className="h-4 w-4 mr-2" />
-            <span>{job.company || "Company Name"}</span>
+            <span>{job.company || "Назва компанії"}</span>
           </div>
           <div className="flex items-center text-gray-600 mb-2">
             <MapPin className="h-4 w-4 mr-2" />
@@ -40,7 +40,7 @@ export function JobCard({ job }: JobCardProps) {
               <DollarSign className="h-4 w-4 mr-2" />
               <span>
                 ${job.salaryRange.min.toLocaleString()} - $
-                {job.salaryRange.max.toLocaleString()} / year
+                {job.salaryRange.max.toLocaleString()} / рік
               </span>
             </div>
           )}
@@ -50,7 +50,7 @@ export function JobCard({ job }: JobCardProps) {
           <span className="text-sm">
             {job.postedAt
               ? new Date(job.postedAt).toLocaleDateString()
-              : "Recently"}
+              : "Нещодавно"}
           </span>
         </div>
       </div>
@@ -68,7 +68,7 @@ export function JobCard({ job }: JobCardProps) {
         ))}
         {job.requirements.length > 3 && (
           <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-            +{job.requirements.length - 3} more
+            +{job.requirements.length - 3} ще
           </span>
         )}
       </div>
@@ -78,7 +78,7 @@ export function JobCard({ job }: JobCardProps) {
           href={`/job/${job._id}`}
           className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
         >
-          View Details
+          Переглянути
         </Link>
       </div>
     </div>

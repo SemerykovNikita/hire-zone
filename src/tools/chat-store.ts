@@ -17,7 +17,7 @@ export async function createChat(jobVacancyId: string): Promise<string> {
 
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
-    throw new Error("User not authenticated");
+    throw new Error("Користувач не автентифікований");
   }
 
   const chat = new ChatModel({

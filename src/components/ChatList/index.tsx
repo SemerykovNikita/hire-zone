@@ -12,7 +12,7 @@ export default async function ChatList() {
         href="/"
         className="block w-full p-2 mb-2 bg-blue-500 text-white rounded text-center"
       >
-        New Chat
+        Новий чат
       </Link>
       {chats.map((chat: any) => (
         <Link
@@ -20,7 +20,7 @@ export default async function ChatList() {
           href={`/chat/${chat._id}`}
           className="block p-2 mb-2 hover:bg-gray-100 rounded"
         >
-          {chat.title}
+          {chat.title || "Без назви"}
         </Link>
       ))}
     </div>

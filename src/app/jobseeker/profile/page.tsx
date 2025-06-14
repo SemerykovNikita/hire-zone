@@ -31,10 +31,10 @@ export default function ProfilePage() {
         if (result.success) {
           setProfileData(result.data);
         } else {
-          setError(result.error || "Failed to load profile data.");
+          setError(result.error || "Не вдалося завантажити дані профілю.");
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       } finally {
         setLoading(false);
       }
@@ -45,7 +45,7 @@ export default function ProfilePage() {
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
-  if (!profileData) return <ErrorState message="No profile data found." />;
+  if (!profileData) return <ErrorState message="Дані профілю не знайдено." />;
 
   const { user, company, applications } = profileData;
 
@@ -60,7 +60,7 @@ export default function ProfilePage() {
           ) : (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold mb-6">
-                Your Job Applications
+                Ваші заявки на вакансії
               </h2>
               <ApplicationList applications={applications} />
             </div>

@@ -19,8 +19,8 @@ export function ApplicationList({
       <div className="text-center py-8 bg-gray-50 rounded-lg">
         <p className="text-gray-600">
           {isEmployer
-            ? "No applications found for your company."
-            : "You have not applied for any jobs yet."}
+            ? "Заявок на ваші вакансії не знайдено."
+            : "Ви ще не подали жодної заявки."}
         </p>
       </div>
     );
@@ -59,8 +59,11 @@ export function ApplicationList({
                   : "bg-red-100 text-red-800"
               }`}
             >
-              {application.status.charAt(0).toUpperCase() +
-                application.status.slice(1)}
+              {application.status === "pending"
+                ? "Очікує"
+                : application.status === "accepted"
+                ? "Прийнято"
+                : "Відхилено"}
             </span>
           </div>
         </div>

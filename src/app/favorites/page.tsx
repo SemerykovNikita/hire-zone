@@ -39,7 +39,9 @@ export default function FavoritesPage() {
     if (result.success && result.data) {
       setFavorites(result.data);
     } else {
-      setError(result.error || "Unable to fetch favorites.");
+      setError(
+        result.error || "Не вдалося отримати список збережених вакансій."
+      );
     }
     setLoading(false);
   };
@@ -57,7 +59,7 @@ export default function FavoritesPage() {
     if (result.success) {
       await fetchFavorites();
     } else {
-      alert(result.error || "Failed to remove favorite.");
+      alert(result.error || "Не вдалося видалити збережену вакансію.");
     }
 
     setRemovingId(null);
@@ -82,16 +84,16 @@ export default function FavoritesPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 h-screen">
-      <h1 className="text-3xl font-bold">Saved Jobs</h1>
+      <h1 className="text-3xl font-bold">Збережені вакансії</h1>
 
       {favorites.length === 0 ? (
         <div className="text-center space-y-4">
-          <p className="text-gray-600">You haven't saved any jobs yet.</p>
+          <p className="text-gray-600">Ви ще не зберегли жодної вакансії.</p>
           <Link
             href="/jobs"
             className="inline-block px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
           >
-            Find Jobs
+            Знайти вакансії
           </Link>
         </div>
       ) : (
@@ -123,13 +125,13 @@ export default function FavoritesPage() {
                 {fav.jobVacancy.description}
               </p>
               <p className="text-sm text-gray-500">
-                Company: {fav.jobVacancy.company.name}
+                Компанія: {fav.jobVacancy.company.name}
               </p>
               <Link
                 href={`/job/${fav.jobVacancy._id}`}
                 className="text-blue-600 hover:underline text-sm"
               >
-                View job
+                Переглянути вакансію
               </Link>
             </div>
           ))}

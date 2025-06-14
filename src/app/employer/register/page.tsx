@@ -48,15 +48,15 @@ export default function EmployerRegisterPage() {
         });
 
         if (signInResult?.error) {
-          setError("Failed to sign in automatically.");
+          setError("Не вдалося автоматично увійти.");
         } else {
           router.push("/employer/create-company");
         }
       } else {
-        setError(result.error || "Failed to create user.");
+        setError(result.error || "Не вдалося створити користувача.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Виникла невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,15 +76,15 @@ export default function EmployerRegisterPage() {
               </Link>
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Create an Employer Account
+              Створіть обліковий запис роботодавця
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Already have an account?{" "}
+              Вже маєте акаунт?{" "}
               <Link
                 href="/signin?role=employer"
                 className="font-medium text-primary hover:text-primary/80"
               >
-                Sign in
+                Увійти
               </Link>
             </p>
           </div>
@@ -102,7 +102,7 @@ export default function EmployerRegisterPage() {
                   htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  First Name
+                  Імʼя
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -116,7 +116,7 @@ export default function EmployerRegisterPage() {
                     onChange={handleChange}
                     required
                     className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
-                    placeholder="John"
+                    placeholder="Іван"
                   />
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function EmployerRegisterPage() {
                   htmlFor="lastName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Last Name
+                  Прізвище
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -140,7 +140,7 @@ export default function EmployerRegisterPage() {
                     onChange={handleChange}
                     required
                     className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
-                    placeholder="Doe"
+                    placeholder="Петренко"
                   />
                 </div>
               </div>
@@ -151,7 +151,7 @@ export default function EmployerRegisterPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email Address
+                Електронна пошта
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -165,7 +165,7 @@ export default function EmployerRegisterPage() {
                   onChange={handleChange}
                   required
                   className="appearance-none block w-full pl-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
-                  placeholder="you@company.com"
+                  placeholder="you@example.com"
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function EmployerRegisterPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Пароль
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -203,10 +203,10 @@ export default function EmployerRegisterPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin h-5 w-5 mr-2" />
-                    Creating Account...
+                    Створення акаунта...
                   </>
                 ) : (
-                  "Create Account"
+                  "Створити акаунт"
                 )}
               </button>
             </div>
@@ -219,12 +219,12 @@ export default function EmployerRegisterPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Need help?{" "}
+                  Потрібна допомога?{" "}
                   <Link
                     href="/contact"
                     className="font-medium text-primary hover:text-primary/80"
                   >
-                    Contact support
+                    Звʼяжіться з підтримкою
                   </Link>
                 </span>
               </div>

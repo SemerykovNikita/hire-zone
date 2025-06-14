@@ -15,7 +15,7 @@ export default function Chat({ chatId, onNewChat }: ChatProps) {
     api: "/api/chat",
     onFinish: (message) => {
       if (!chatId) {
-        // Извлекаем chatId из первого чанка ответа
+        // Отримуємо chatId з першого чанка відповіді
         const chatIdMatch = message.content.match(/"chatId":"([^"]+)"/);
         if (chatIdMatch && chatIdMatch[1]) {
           onNewChat(chatIdMatch[1]);
@@ -23,6 +23,7 @@ export default function Chat({ chatId, onNewChat }: ChatProps) {
       }
     },
   });
+
   const [savedMessages, setSavedMessages] = useState([]);
 
   useEffect(() => {
@@ -49,15 +50,14 @@ export default function Chat({ chatId, onNewChat }: ChatProps) {
       <div className="space-y-4">
         {savedMessages.map((m: any, index: number) => (
           <div key={index} className="whitespace-pre-wrap">
-            <strong>{m.role}: </strong>
+            <strong>{m.role === "user" ? "Користувач" : "Бот"}: </strong>
             {m.content}
           </div>
         ))}
         {messages.map((m) => (
           <div key={m.id} className="whitespace-pre-wrap">
-            <strong>{m.role}: </strong>
-            {m.content.replace(/"chatId":"[^"]+"/, "")}{" "}
-            {/* Удаляем chatId из отображения */}
+            <strong>{m.role === "user" ? "Користувач" : "Бот"}: </strong>
+            {m.content.replace(/"chatId":"[^"]+"/, "")}
           </div>
         ))}
       </div>
@@ -65,7 +65,7 @@ export default function Chat({ chatId, onNewChat }: ChatProps) {
         <input
           className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
           value={input}
-          placeholder="Say something..."
+          placeholder="Напишіть щось..."
           onChange={handleInputChange}
         />
       </form>

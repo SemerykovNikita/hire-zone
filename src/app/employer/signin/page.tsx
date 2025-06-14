@@ -26,12 +26,12 @@ export default function EmployerSignInPage() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password. Please try again.");
+        setError("Невірна електронна пошта або пароль. Спробуйте ще раз.");
       } else {
         window.location.href = "/employer/dashboard";
       }
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError("Сталася непередбачувана помилка. Спробуйте ще раз.");
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +59,7 @@ export default function EmployerSignInPage() {
                 </Link>
               </div>
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Employer Sign In
+                Вхід для роботодавців
               </h2>
             </div>
             <div>
@@ -67,7 +67,7 @@ export default function EmployerSignInPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Електронна пошта
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -90,7 +90,7 @@ export default function EmployerSignInPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Пароль
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -120,7 +120,7 @@ export default function EmployerSignInPage() {
                   htmlFor="remember-me"
                   className="ml-2 block text-sm text-gray-900"
                 >
-                  Remember me
+                  Запамʼятати мене
                 </label>
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function EmployerSignInPage() {
                 disabled={isLoading}
                 className="w-full flex bg-black justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                {isLoading ? "Вхід..." : "Увійти"}
               </button>
             </div>
           </form>
@@ -143,12 +143,12 @@ export default function EmployerSignInPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Don't have an account?{" "}
+                  Немає облікового запису?{" "}
                   <Link
                     href="/employer/register"
                     className="font-medium text-primary hover:text-primary/80"
                   >
-                    Register as Employer
+                    Зареєструватися як роботодавець
                   </Link>
                 </span>
               </div>

@@ -13,20 +13,17 @@ export default async function Page({
 }: {
   searchParams: { jobVacancyId?: string };
 }) {
-  // If jobVacancyId is provided, create a chat and redirect
   if (searchParams.jobVacancyId) {
     const id = await createChat(searchParams.jobVacancyId);
     redirect(`/chat/${id}?jobVacancyId=${searchParams.jobVacancyId}`);
   }
 
-  // Get the current user session
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
     redirect("/auth/signin?callbackUrl=/chat");
   }
 
-  // Fetch only the employer's job vacancies
   const jobVacanciesResponse = await getJobVacanciesByEmployer(session.user.id);
 
   if (!jobVacanciesResponse.success) {
@@ -34,10 +31,10 @@ export default async function Page({
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Error</h1>
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Помилка</h1>
             <p>
               {jobVacanciesResponse.error ||
-                "Failed to load your job vacancies"}
+                "Не вдалося завантажити ваші вакансії"}
             </p>
           </div>
         </div>
@@ -53,10 +50,10 @@ export default async function Page({
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
             <MessageCircle className="h-8 w-8" />
-            Select Your Job Vacancy to Chat About
+            Оберіть вакансію для спілкування
           </h1>
           <p className="text-gray-600 mt-2">
-            Choose one of your job vacancies to start a conversation
+            Виберіть одну зі своїх вакансій, щоб почати розмову
           </p>
         </div>
 
@@ -84,9 +81,7 @@ export default async function Page({
             ))
           ) : (
             <div className="col-span-full bg-white p-6 rounded-lg shadow-md text-center">
-              <p className="text-gray-600">
-                You don't have any job vacancies yet.
-              </p>
+              <p className="text-gray-600">У вас ще немає жодної вакансії.</p>
             </div>
           )}
         </div>

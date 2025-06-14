@@ -38,7 +38,7 @@ export default function CategoriesPage() {
         setCategories(res.data);
       }
     } catch (error) {
-      console.error("Failed to fetch categories:", error);
+      console.error("Не вдалося отримати категорії:", error);
     }
   };
 
@@ -68,7 +68,7 @@ export default function CategoriesPage() {
           fetchCategories();
           closeModal();
         } else {
-          alert("Error: " + res.error);
+          alert("Помилка: " + res.error);
         }
       } else if (modalType === "edit" && selectedCategory) {
         const res = await updateCategory(selectedCategory.id, categoryName);
@@ -76,7 +76,7 @@ export default function CategoriesPage() {
           fetchCategories();
           closeModal();
         } else {
-          alert("Error: " + res.error);
+          alert("Помилка: " + res.error);
         }
       } else if (modalType === "delete" && selectedCategory) {
         const res = await deleteCategory(selectedCategory.id);
@@ -84,11 +84,11 @@ export default function CategoriesPage() {
           fetchCategories();
           closeModal();
         } else {
-          alert("Error: " + res.error);
+          alert("Помилка: " + res.error);
         }
       }
     } catch (error) {
-      console.error("Operation error:", error);
+      console.error("Помилка операції:", error);
     }
   };
 
@@ -99,7 +99,7 @@ export default function CategoriesPage() {
           <div className="flex items-center space-x-3">
             <FolderTree className="h-8 w-8 text-gray-900" />
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Categories
+              Категорії
             </h1>
           </div>
           <button
@@ -107,7 +107,7 @@ export default function CategoriesPage() {
             className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-200"
           >
             <Plus className="h-4 w-4 mr-2" />
-            New Category
+            Нова категорія
           </button>
         </div>
 
@@ -128,13 +128,13 @@ export default function CategoriesPage() {
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Name
+                        Назва
                       </th>
                       <th
                         scope="col"
                         className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                       >
-                        <span className="sr-only">Actions</span>
+                        <span className="sr-only">Дії</span>
                       </th>
                     </tr>
                   </thead>
@@ -180,16 +180,16 @@ export default function CategoriesPage() {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                       <h3 className="text-xl font-semibold leading-6 text-gray-900">
-                        {modalType === "create" && "Create Category"}
-                        {modalType === "edit" && "Edit Category"}
-                        {modalType === "delete" && "Delete Category"}
+                        {modalType === "create" && "Створити категорію"}
+                        {modalType === "edit" && "Редагувати категорію"}
+                        {modalType === "delete" && "Видалити категорію"}
                       </h3>
                       <div className="mt-2">
                         {modalType === "delete" ? (
                           <p className="text-sm text-gray-500">
-                            Are you sure you want to delete the category "
-                            {selectedCategory?.name}"? This action cannot be
-                            undone.
+                            Ви впевнені, що хочете видалити категорію "
+                            {selectedCategory?.name}"? Цю дію не можна буде
+                            скасувати.
                           </p>
                         ) : (
                           <form onSubmit={handleSubmit} className="mt-4">
@@ -198,7 +198,7 @@ export default function CategoriesPage() {
                                 htmlFor="name"
                                 className="block text-sm font-medium text-gray-700"
                               >
-                                Category Name
+                                Назва категорії
                               </label>
                               <input
                                 type="text"
@@ -209,7 +209,7 @@ export default function CategoriesPage() {
                                   setCategoryName(e.target.value)
                                 }
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm"
-                                placeholder="Enter category name"
+                                placeholder="Введіть назву категорії"
                                 required
                               />
                             </div>
@@ -228,14 +228,14 @@ export default function CategoriesPage() {
                           : "bg-black hover:bg-gray-800"
                       }`}
                     >
-                      {modalType === "delete" ? "Delete" : "Save"}
+                      {modalType === "delete" ? "Видалити" : "Зберегти"}
                     </button>
                     <button
                       type="button"
                       onClick={closeModal}
                       className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     >
-                      Cancel
+                      Скасувати
                     </button>
                   </div>
                 </div>

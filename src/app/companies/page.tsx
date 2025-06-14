@@ -19,7 +19,7 @@ export default function AllCompaniesPage() {
       if (result.success && result.data) {
         setCompanies(result.data);
       } else {
-        setError(result.error || "Failed to fetch companies.");
+        setError(result.error || "Не вдалося отримати список компаній.");
       }
       setLoading(false);
     };
@@ -43,9 +43,10 @@ export default function AllCompaniesPage() {
       </div>
     );
   }
+
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold">All Companies</h1>
+      <h1 className="text-3xl font-bold">Усі компанії</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {companies.map((company) => (
           <Link
@@ -59,7 +60,7 @@ export default function AllCompaniesPage() {
                 <h2 className="text-xl font-semibold">{company.name}</h2>
               </div>
               <p className="text-gray-600">
-                {company.description || "No description"}
+                {company.description || "Опис відсутній"}
               </p>
             </div>
             {company.website && (
@@ -69,7 +70,7 @@ export default function AllCompaniesPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-sm text-blue-600 hover:underline mt-4"
               >
-                Visit Website <ExternalLink className="w-4 h-4 ml-1" />
+                Перейти на сайт <ExternalLink className="w-4 h-4 ml-1" />
               </a>
             )}
           </Link>

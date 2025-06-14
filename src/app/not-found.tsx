@@ -13,15 +13,15 @@ export default function NotFoundPage() {
             </h1>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-2xl md:text-3xl font-semibold text-black">
-                Page Not Found
+                Сторінку не знайдено
               </span>
             </div>
           </div>
 
           <div className="space-y-3 max-w-lg mx-auto">
             <p className="text-gray-600">
-              The page you're looking for doesn't exist or has been moved. Check
-              the URL or try one of the actions below.
+              Сторінка, яку ви шукаєте, не існує або була переміщена. Перевірте
+              URL-адресу або скористайтеся однією з кнопок нижче.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function NotFoundPage() {
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-black rounded-xl font-medium text-black hover:bg-black hover:text-white transition-all gap-2"
             >
               <ArrowLeft className="w-5 h-5" />
-              Go Back
+              Назад
             </button>
 
             <button
@@ -39,7 +39,7 @@ export default function NotFoundPage() {
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-black rounded-xl font-medium text-white hover:bg-gray-800 transition-all gap-2"
             >
               <Home className="w-5 h-5" />
-              Return Home
+              На головну
             </button>
           </div>
         </div>

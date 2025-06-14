@@ -53,10 +53,10 @@ export default function CreateJobPage() {
             setHasCompany(true);
           } else {
             setHasCompany(false);
-            setError("You need to create a company before posting a job.");
+            setError("Потрібно створити компанію перед публікацією вакансії.");
           }
         } catch (err) {
-          setError("An error occurred while fetching company data.");
+          setError("Виникла помилка при отриманні даних про компанію.");
         }
       }
     };
@@ -123,10 +123,10 @@ export default function CreateJobPage() {
       if (result.success) {
         router.push("/employer/dashboard");
       } else {
-        setError(result.error || "Failed to create job vacancy.");
+        setError(result.error || "Не вдалося створити вакансію.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     } finally {
       setIsSubmitting(false);
     }
@@ -146,16 +146,16 @@ export default function CreateJobPage() {
         <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
           <Building2 className="mx-auto h-12 w-12 text-primary" />
           <h2 className="mt-4 text-xl font-semibold text-gray-900">
-            Company Required
+            Потрібна компанія
           </h2>
           <p className="mt-2 text-gray-600">
-            You need to create a company profile before posting job vacancies.
+            Щоб опублікувати вакансію, спершу створіть профіль компанії.
           </p>
           <Link
             href="/employer/create-company"
             className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90"
           >
-            Create Company Profile
+            Створити профіль компанії
           </Link>
         </div>
       </div>
@@ -170,11 +170,11 @@ export default function CreateJobPage() {
             <div className="flex items-center space-x-3">
               <Briefcase className="h-8 w-8 text-primary" />
               <h1 className="text-2xl font-bold text-gray-900">
-                Post a New Job
+                Створити вакансію
               </h1>
             </div>
             <p className="mt-2 text-gray-600">
-              Create a new job posting to find the perfect candidate.
+              Додайте нову вакансію, щоб знайти ідеального кандидата.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ export default function CreateJobPage() {
               >
                 <div className="flex items-center space-x-2">
                   <Briefcase className="h-4 w-4" />
-                  <span>Job Title</span>
+                  <span>Назва вакансії</span>
                 </div>
               </label>
               <input
@@ -206,7 +206,7 @@ export default function CreateJobPage() {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="e.g., Senior Software Engineer"
+                placeholder="Наприклад: Senior Software Engineer"
               />
             </div>
 
@@ -217,7 +217,7 @@ export default function CreateJobPage() {
               >
                 <div className="flex items-center space-x-2">
                   <FileText className="h-4 w-4" />
-                  <span>Job Description</span>
+                  <span>Опис вакансії</span>
                 </div>
               </label>
               <textarea
@@ -228,7 +228,7 @@ export default function CreateJobPage() {
                 required
                 rows={6}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="Describe the role, responsibilities, and ideal candidate..."
+                placeholder="Опишіть роль, обовʼязки та ідеального кандидата..."
               />
             </div>
 
@@ -239,7 +239,7 @@ export default function CreateJobPage() {
               >
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />
-                  <span>Location</span>
+                  <span>Місто</span>
                 </div>
               </label>
               <input
@@ -250,13 +250,13 @@ export default function CreateJobPage() {
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                placeholder="e.g., New York, NY"
+                placeholder="Наприклад: Київ"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Requirements
+                Вимоги
               </label>
               <div className="space-y-3">
                 {formData.requirements.map((requirement, index) => (
@@ -266,7 +266,7 @@ export default function CreateJobPage() {
                       value={requirement}
                       onChange={(e) => handleRequirementChange(e, index)}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                      placeholder="e.g., 5+ years of experience with React"
+                      placeholder="Наприклад: 5+ років досвіду з React"
                     />
                     {formData.requirements.length > 1 && (
                       <button
@@ -285,7 +285,7 @@ export default function CreateJobPage() {
                   className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Requirement
+                  Додати вимогу
                 </button>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function CreateJobPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <div className="flex items-center space-x-2">
                   <DollarSign className="h-4 w-4" />
-                  <span>Salary Range (Annual)</span>
+                  <span>Діапазон зарплати (річний)</span>
                 </div>
               </label>
               <div className="grid grid-cols-2 gap-4">
@@ -305,7 +305,7 @@ export default function CreateJobPage() {
                     onChange={(e) => handleSalaryChange(e, "min")}
                     min="0"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                    placeholder="Minimum"
+                    placeholder="Мінімум"
                   />
                 </div>
                 <div>
@@ -315,7 +315,7 @@ export default function CreateJobPage() {
                     onChange={(e) => handleSalaryChange(e, "max")}
                     min={formData.salaryRange.min}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                    placeholder="Maximum"
+                    placeholder="Максимум"
                   />
                 </div>
               </div>
@@ -330,10 +330,10 @@ export default function CreateJobPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    Creating Job Posting...
+                    Створення вакансії...
                   </>
                 ) : (
-                  "Post Job"
+                  "Опублікувати вакансію"
                 )}
               </button>
             </div>

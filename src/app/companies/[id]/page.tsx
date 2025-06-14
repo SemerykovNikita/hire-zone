@@ -38,7 +38,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
                 </h1>
               </div>
               <p className="text-gray-600 max-w-2xl leading-relaxed">
-                {company.description || "No description available."}
+                {company.description || "Опис компанії відсутній."}
               </p>
               {company.website && (
                 <a
@@ -49,7 +49,7 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
                 >
                   <Globe className="w-4 h-4" />
                   <span className="border-b border-gray-300">
-                    Visit Website
+                    Перейти на сайт
                   </span>
                 </a>
               )}
@@ -61,14 +61,14 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
           <div className="flex items-center space-x-3">
             <Briefcase className="w-6 h-6 text-gray-700" />
             <h2 className="text-2xl font-semibold text-black">
-              Open Positions
+              Відкриті вакансії
             </h2>
           </div>
 
           {vacancies.length === 0 ? (
             <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
               <p className="text-gray-500">
-                This company has no active job listings.
+                У цієї компанії наразі немає активних вакансій.
               </p>
             </div>
           ) : (

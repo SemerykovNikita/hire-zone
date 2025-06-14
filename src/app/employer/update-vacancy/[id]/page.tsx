@@ -43,10 +43,10 @@ export default function UpdateVacancyPage() {
         if (result.success && result.data) {
           setFormData(result.data);
         } else {
-          setError(result.error || "Failed to load vacancy details.");
+          setError(result.error || "Не вдалося завантажити дані про вакансію.");
         }
       } catch (err) {
-        setError("An unknown error occurred.");
+        setError("Сталася невідома помилка.");
       } finally {
         setLoading(false);
       }
@@ -104,10 +104,10 @@ export default function UpdateVacancyPage() {
       if (result.success) {
         router.push("/employer/dashboard");
       } else {
-        setError(result.error || "Failed to update vacancy.");
+        setError(result.error || "Не вдалося оновити вакансію.");
       }
     } catch (err) {
-      setError("An unknown error occurred.");
+      setError("Сталася невідома помилка.");
     }
   };
 
@@ -135,7 +135,7 @@ export default function UpdateVacancyPage() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-2">
             <Briefcase className="h-8 w-8" />
-            Update Job Vacancy
+            Оновлення вакансії
           </h1>
         </div>
 
@@ -143,7 +143,7 @@ export default function UpdateVacancyPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                Job Title
+                Назва вакансії
               </label>
               <div className="relative">
                 <input
@@ -161,11 +161,11 @@ export default function UpdateVacancyPage() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                Description
+                Опис
               </label>
               <textarea
                 name="description"
-                placeholder="Detailed job description..."
+                placeholder="Детальний опис вакансії..."
                 value={formData.description}
                 onChange={handleChange}
                 required
@@ -175,13 +175,13 @@ export default function UpdateVacancyPage() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                Location
+                Місто
               </label>
               <div className="relative">
                 <input
                   type="text"
                   name="city"
-                  placeholder="City"
+                  placeholder="Київ"
                   value={formData.city}
                   onChange={handleChange}
                   required
@@ -193,14 +193,14 @@ export default function UpdateVacancyPage() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                Salary Range
+                Зарплатний діапазон
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative">
                   <input
                     type="number"
                     name="min"
-                    placeholder="Minimum"
+                    placeholder="Мінімум"
                     value={formData.salaryRange?.min}
                     onChange={(e) => handleSalaryChange(e, "min")}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
@@ -211,7 +211,7 @@ export default function UpdateVacancyPage() {
                   <input
                     type="number"
                     name="max"
-                    placeholder="Maximum"
+                    placeholder="Максимум"
                     value={formData.salaryRange?.max}
                     onChange={(e) => handleSalaryChange(e, "max")}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
@@ -223,7 +223,7 @@ export default function UpdateVacancyPage() {
 
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Requirements
+                Вимоги
               </label>
               <div className="space-y-3">
                 {formData.requirements.map((requirement, index) => (
@@ -231,7 +231,7 @@ export default function UpdateVacancyPage() {
                     <div className="relative flex-1">
                       <input
                         type="text"
-                        placeholder="Add requirement"
+                        placeholder="Введіть вимогу"
                         value={requirement}
                         onChange={(e) => handleRequirementChange(e, index)}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
@@ -253,7 +253,7 @@ export default function UpdateVacancyPage() {
                   className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <Plus className="h-5 w-5" />
-                  Add Requirement
+                  Додати вимогу
                 </button>
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function UpdateVacancyPage() {
                 className="w-full flex items-center justify-center gap-2 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
               >
                 <Save className="h-5 w-5" />
-                Update Vacancy
+                Оновити вакансію
               </button>
             </div>
           </form>

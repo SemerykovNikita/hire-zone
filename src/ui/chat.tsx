@@ -28,7 +28,7 @@ export default function Chat({
             setVacancyTitle(result.data.title);
           }
         } catch (error) {
-          console.error("Failed to fetch vacancy title:", error);
+          console.error("Не вдалося отримати назву вакансії:", error);
         }
       }
     };
@@ -51,20 +51,20 @@ export default function Chat({
 
   return (
     <div className="flex flex-col flex-1 bg-white h-full overflow-hidden">
-      {/* Chat header */}
+      {/* Заголовок чату */}
       <div className="border-b border-gray-200 p-4">
         <h1 className="text-xl font-semibold text-gray-800">
-          Job Vacancy Analysis: {vacancyTitle || "Loading..."}
+          Аналіз вакансії: {vacancyTitle || "Завантаження..."}
         </h1>
       </div>
 
-      {/* Messages container */}
+      {/* Контейнер повідомлень */}
       <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-6">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-gray-500">
-              <h3 className="text-xl font-medium mb-2">Start a conversation</h3>
-              <p>Ask about candidate resumes for this job vacancy</p>
+              <h3 className="text-xl font-medium mb-2">Почніть розмову</h3>
+              <p>Запитайте про резюме кандидатів для цієї вакансії</p>
             </div>
           </div>
         ) : (
@@ -96,7 +96,7 @@ export default function Chat({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
+      {/* Область вводу */}
       <div className="sticky bottom-0 w-full border-t border-gray-200 p-4 bg-white">
         <form
           onSubmit={handleSubmit}
@@ -105,7 +105,7 @@ export default function Chat({
           <input
             value={input}
             onChange={handleInputChange}
-            placeholder="Type your message..."
+            placeholder="Введіть повідомлення..."
             className="flex-1 px-4 py-3 bg-transparent outline-none text-gray-800"
             disabled={isLoading}
           />
@@ -115,7 +115,7 @@ export default function Chat({
             disabled={isLoading || !input.trim()}
           >
             <Send size={20} />
-            <span className="sr-only">Send</span>
+            <span className="sr-only">Надіслати</span>
           </button>
         </form>
       </div>
